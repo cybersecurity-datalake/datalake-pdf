@@ -1,6 +1,6 @@
 # Cybersecurity Datalake
 
-[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repository=PepeuFBV/texacademy&ref=main&devcontainer_path=.devcontainer)
+[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?repository=cybersecurity-datalake/datalake-pdf&ref=main&devcontainer_path=.devcontainer)
 
 Data paper para Datalake de Cibersegurança, um aglomerado de bases de dados públicas relacionadas a cibersegurança, com o objetivo de facilitar o acesso e a análise de dados de CVEs.
 
