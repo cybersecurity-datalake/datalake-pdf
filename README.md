@@ -9,7 +9,6 @@ Data paper para Datalake de Cibersegurança, um aglomerado de bases de dados pú
 - **[DEVCONTAINER.md](.devcontainer/DEVCONTAINER.md)** — Configuração e uso de DevContainers para compilação LaTeX local.
 - **[CODESPACES.md](.devcontainer/CODESPACES.md)** — Como usar GitHub Codespaces para desenvolvimento na nuvem.
 - **[CI.md](.github/workflows/CI.md)** — Pipelines de qualidade (validação de templates, CI/CD).
-- **[scripts/README.md](scripts/README.md)** — Detalhes sobre scripts de instalação e automação.
 
 ## Licença
 
