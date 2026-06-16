@@ -3,6 +3,8 @@
 set -euo pipefail
 
 LOGFILE=/tmp/devcontainer-post-create.log
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 exec > >(tee "$LOGFILE") 2>&1
 
@@ -46,11 +48,107 @@ setup_git_identity() {
     return
   fi
 
-  git config --global user.name "$host_git_user_name"
-  git config --global user.email "$host_git_user_email"
+  git config --global --replace-all user.name "$host_git_user_name"
+  git config --global --replace-all user.email "$host_git_user_email"
+
+  if [ "$(git config --global --get user.name || true)" != "$host_git_user_name" ]; then
+    echo "[git] Failed to apply git user.name from the host"
+    exit 1
+  fi
+
+  if [ "$(git config --global --get user.email || true)" != "$host_git_user_email" ]; then
+    echo "[git] Failed to apply git user.email from the host"
+    exit 1
+  fi
 
   echo "[git] Configured git user.name=$host_git_user_name"
   echo "[git] Configured git user.email=$host_git_user_email"
+}
+
+setup_git_workspace_safety() {
+  if git config --global --get-all safe.directory | grep -Fxq "$WORKSPACE_DIR"; then
+    echo "[git] Workspace already marked as safe: $WORKSPACE_DIR"
+    return
+  fi
+
+  git config --global --add safe.directory "$WORKSPACE_DIR"
+  echo "[git] Added safe.directory=$WORKSPACE_DIR"
+}
+
+setup_host_ssh() {
+  local host_ssh_dir="$HOME/.host-ssh"
+  local container_ssh_dir="$HOME/.ssh"
+
+  mkdir -p "$container_ssh_dir"
+  chmod 700 "$container_ssh_dir"
+
+  if [ -f "$host_ssh_dir/config" ]; then
+    cp -f "$host_ssh_dir/config" "$container_ssh_dir/config"
+    chmod 600 "$container_ssh_dir/config"
+    echo "[ssh] Copied host SSH config"
+  fi
+
+  if [ -f "$host_ssh_dir/known_hosts" ]; then
+    cp -f "$host_ssh_dir/known_hosts" "$container_ssh_dir/known_hosts"
+    chmod 600 "$container_ssh_dir/known_hosts"
+    echo "[ssh] Copied host known_hosts"
+  fi
+
+  if [ -S "${SSH_AUTH_SOCK:-}" ]; then
+    echo "[ssh] Host SSH agent forwarded at ${SSH_AUTH_SOCK}"
+  elif [ -n "${SSH_AUTH_SOCK:-}" ]; then
+    echo "[ssh] SSH_AUTH_SOCK is set but no socket is available at ${SSH_AUTH_SOCK}"
+    exit 1
+  else
+    echo "[ssh] Host SSH agent not mounted; SSH remotes may prompt for credentials"
+  fi
+}
+
+seed_known_hosts_for_git_remotes() {
+  local known_hosts_file="$HOME/.ssh/known_hosts"
+  local remote_urls=""
+
+  if ! git -C "$WORKSPACE_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "[ssh] Workspace is not a Git work tree; skipping known_hosts seeding"
+    return
+  fi
+
+  remote_urls="$(git -C "$WORKSPACE_DIR" remote get-url --all origin 2>/dev/null || true)"
+  if [ -z "$remote_urls" ]; then
+    echo "[ssh] No Git remotes found for known_hosts seeding"
+    return
+  fi
+
+  touch "$known_hosts_file"
+  chmod 600 "$known_hosts_file"
+
+  while IFS= read -r remote_url; do
+    local host=""
+
+    case "$remote_url" in
+      git@*:* )
+        host="${remote_url#git@}"
+        host="${host%%:*}"
+        ;;
+      ssh://* )
+        host="${remote_url#ssh://}"
+        host="${host#*@}"
+        host="${host%%[:/]*}"
+        ;;
+    esac
+
+    if [ -z "$host" ]; then
+      continue
+    fi
+
+    if ssh-keygen -F "$host" -f "$known_hosts_file" >/dev/null 2>&1; then
+      echo "[ssh] known_hosts already contains $host"
+      continue
+    fi
+
+    ssh-keyscan -H "$host" >> "$known_hosts_file" 2>/dev/null
+    echo "[ssh] Added $host to known_hosts"
+  done <<< "$remote_urls"
 }
 
 echo "[$(date -Iseconds)] Starting devcontainer post-create validation"
@@ -62,6 +160,12 @@ setup_host_gpg
 echo
 echo "[git-setup]"
 setup_git_identity
+setup_git_workspace_safety
+
+echo
+echo "[ssh-setup]"
+setup_host_ssh
+seed_known_hosts_for_git_remotes
 
 echo
 echo "[tools]"
@@ -71,6 +175,7 @@ chktex --version | head -n 1
 latexindent --version | head -n 1
 awk -W version | head -n 1
 ping -V | head -n 1
+ssh -V
 
 echo
 echo "[dns]"

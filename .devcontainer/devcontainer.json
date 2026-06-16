@@ -1,10 +1,7 @@
 {
     "name": "datalake-pdf",
     "initializeCommand": "bash .devcontainer/initialize-host-env.sh",
-    "dockerComposeFile": [
-        "compose.yaml",
-        "compose.host.yaml"
-    ],
+    "dockerComposeFile": "compose.yaml",
     "service": "devcontainer",
     "workspaceFolder": "/workspaces/datalake-pdf",
     "customizations": {

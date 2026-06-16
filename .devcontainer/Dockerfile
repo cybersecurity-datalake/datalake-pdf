@@ -21,6 +21,7 @@ RUN apt-get update \
         libyaml-tiny-perl \
         lmodern \
         make \
+        openssh-client \
         pinentry-curses \
         poppler-utils \
         ripgrep \

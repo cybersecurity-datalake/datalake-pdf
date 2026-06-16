@@ -34,7 +34,7 @@ usuário `vscode`.
 ## Automação do ambiente
 
 - `initializeCommand`: executa `.devcontainer/initialize-host-env.sh` no host e
-  gera os arquivos usados pelo Docker Compose antes do container subir
+  gera o `compose.yaml` usado pelo Docker Compose antes do container subir
 - `postCreateCommand`: executa `.devcontainer/post-create-validate.sh` e valida
   ferramentas principais, DNS, HTTPS, setup de GPG no container e a checagem
   de checksum usada pelo instalador do Codex CLI
@@ -69,13 +69,27 @@ estar disponível no host.
 ## Identidade Git no container
 
 No DevContainer local, `initialize-host-env.sh` também lê `git config --global`
-do host e encaminha `user.name` e `user.email` para o container via variáveis de
-ambiente do Compose.
+do host e injeta `user.name` e `user.email` no `compose.yaml` gerado.
 
 Durante o `postCreateCommand`, esses valores são aplicados com `git config
 --global` no usuário `vscode`. Se a identidade Git não estiver configurada no
 host, o container sobe normalmente e apenas registra que o Git interno ficou sem
 usuário configurado.
+
+## SSH para remotos Git
+
+O container instala `openssh-client`, então comandos como
+`git pull --tags origin main` conseguem invocar `ssh`.
+
+Em DevContainer local no Linux, `initialize-host-env.sh` também tenta:
+
+1. encaminhar o socket `SSH_AUTH_SOCK` do host para `/tmp/ssh-agent.sock`
+2. expor `~/.ssh/config` em `/home/vscode/.host-ssh/config`, se existir
+3. expor `~/.ssh/known_hosts` em `/home/vscode/.host-ssh/known_hosts`, se existir
+
+Durante o `postCreateCommand`, o conteúdo de `config` e `known_hosts` é copiado
+para `~/.ssh` do usuário `vscode`. Isso mantém as chaves privadas no host e
+permite usar o agente SSH já autenticado da sua máquina dentro do container.
 
 ## Logs
 
@@ -91,6 +105,6 @@ Os limites ficam em `.devcontainer/.env.resources`:
 - `MEM_LIMIT=2G`
 - `CPU_LIMIT=1`
 
-Eles são lidos pelo `initialize-host-env.sh`, que gera `.devcontainer/.env`
+Eles são lidos pelo `initialize-host-env.sh`, que gera `.devcontainer/compose.yaml`
 para o Docker Compose local. Em Codespaces, o tipo de máquina escolhido
 continua prevalecendo.
