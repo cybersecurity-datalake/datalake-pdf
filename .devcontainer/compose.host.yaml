@@ -1,0 +1,5 @@
+services:
+  devcontainer:
+    volumes:
+      - /home/pedrofbv/.gnupg:/home/vscode/.host-gnupg:ro
+      - /run/user/1000/gnupg/S.gpg-agent.extra:/home/vscode/.gnupg/S.gpg-agent

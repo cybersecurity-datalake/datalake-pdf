@@ -1,0 +1,51 @@
+{
+    "name": "datalake-pdf",
+    "initializeCommand": "bash .devcontainer/initialize-host-env.sh",
+    "dockerComposeFile": [
+        "compose.yaml",
+        "compose.host.yaml"
+    ],
+    "service": "devcontainer",
+    "workspaceFolder": "/workspaces/datalake-pdf",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "latex-workshop.latex.autoBuild.run": "onFileChange",
+                "latex-workshop.latex.watch.files.usePolling": true,
+                "latex-workshop.latex.outDir": "%DIR%/../output",
+                "latex-workshop.latex.tools": [
+                    {
+                        "name": "latexmk",
+                        "command": "latexmk",
+                        "args": [
+                            "-pdf",
+                            "-interaction=nonstopmode",
+                            "-file-line-error",
+                            "-halt-on-error",
+                            "-outdir=%DIR%/../output",
+                            "%DOC%"
+                        ]
+                    }
+                ],
+                "latex-workshop.latex.recipes": [
+                    {
+                        "name": "latexmk",
+                        "tools": [
+                            "latexmk"
+                        ]
+                    }
+                ],
+                "latex-workshop.latexindent.path": "/usr/bin/latexindent",
+                "latex-workshop.formatting.latexindent.path": "/usr/bin/latexindent"
+            },
+            "extensions": [
+                "james-yu.latex-workshop"
+            ]
+        }
+    },
+    "postCreateCommand": "bash .devcontainer/post-create-validate.sh",
+    "postAttachCommand": "gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1 || true",
+    "postStartCommand": "bash .devcontainer/start-watchers.sh || true",
+    "remoteUser": "vscode"
+}

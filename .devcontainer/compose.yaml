@@ -1,0 +1,23 @@
+# Docker Compose configuration for the TeX DevContainer.
+#
+# Resource limits are derived from .env.resources by
+# .devcontainer/initialize-host-env.sh, which writes the Compose .env file
+# before the container starts.
+#
+# Codespaces note: GitHub Codespaces controls resources via machine type and
+# may not honor these limits. They take full effect for local DevContainers.
+
+services:
+  devcontainer:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    environment:
+      HOST_GIT_USER_NAME: ${HOST_GIT_USER_NAME:-}
+      HOST_GIT_USER_EMAIL: ${HOST_GIT_USER_EMAIL:-}
+    mem_limit: ${MEM_LIMIT:-2g}
+    cpus: '${CPU_LIMIT:-1}'
+    volumes:
+      - ..:/workspaces/datalake-pdf:cached
+
+    command: sleep infinity
