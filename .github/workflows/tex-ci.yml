@@ -1,0 +1,52 @@
+name: TeX CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install TeX toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            chktex \
+            latexmk \
+            lmodern \
+            texlive-extra-utils \
+            texlive-fonts-recommended \
+            texlive-lang-portuguese \
+            texlive-latex-extra \
+            texlive-latex-recommended \
+            texlive-pictures \
+            texlive-publishers
+
+      - name: Verify entrypoint exists
+        run: test -f src/main.tex
+
+      - name: Ensure output directory exists
+        run: mkdir -p output
+
+      - name: Lint TeX sources
+        run: chktex -q -n1 -n8 src/main.tex
+
+      - name: Build PDF
+        run: latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=output src/main.tex
+
+      - name: Verify PDF output
+        run: test -f output/main.pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-pdf
+          path: output/main.pdf
