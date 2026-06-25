@@ -1,26 +1,44 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
+\usepackage{sbc}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[brazilian]{babel}
-\usepackage{lmodern}
-\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{graphicx,url}
+     
+\sloppy
 
-\title{Datalake de Cibersegurança}
-\author{Projeto em preparação}
-\date{\today}
+\title{Cybersecurity and CVE Multi-Database Tracking Dataset}
+
+\author{José F. C. de Oliveira\inst{1}, Lucas X. de Almeida\inst{1}, Pedro F. B. Viagem\inst{1}, Rafael R. M. da Silva\inst{1}, e Rodrigo A. da Costa\inst{1}}
+
+\address{Bacharelado em Ciência da Computação\\
+Universidade Federal Rural de Pernambuco (UFRPE)\\
+   Recife -- PE -- Brasil
+  \email{josefernando354@gmail.com, lucasxavierdealmeida@gmail.com, pedrofigueiraboaviagem@gmail.com, rafael.rmsilva11@gmail.com, roro.costa2018@gmail.com }
+}
 
 \begin{document}
 
 \maketitle
 
-\section{Documento inicial}
+\begin{abstract}
+    The growing number of disclosed software vulnerabilities poses significant challenges for organizations and researchers seeking to assess and prioritize cybersecurity risks. Although several public sources provide valuable information about vulnerabilities, exploits, and threat intelligence, such data are often distributed across multiple platforms, formats, and levels of granularity, making integrated analysis difficult. This paper presents the construction of an integrated vulnerability intelligence dataset designed to support research on active exploitation prediction and vulnerability remediation prioritization. The proposed approach includes the collection, transformation, normalization, and integration of data from multiple public sources, resulting in a structured and enriched dataset containing relevant risk-related attributes. In addition to describing the adopted methodology, the paper provides a detailed characterization of the dataset, technical and quality validation procedures, and a discussion of its potential reuse in both academic and industrial contexts. Finally, the dataset is publicly released to promote research reproducibility and foster further advances in vulnerability management and cyber threat intelligence.
+\end{abstract}
 
-Este arquivo existe para validar o ambiente de desenvolvimento, a compilação
-LaTeX local e a pipeline de integração contínua.
+\begin{resumo}
+    A crescente quantidade de vulnerabilidades divulgadas anualmente representa um desafio significativo para organizações e pesquisadores que buscam identificar e priorizar riscos de segurança cibernética. Embora diversas fontes públicas disponibilizam informações relevantes sobre vulnerabilidades, exploits e ameaças, esses dados encontram-se dispersos em diferentes plataformas, formatos e níveis de granularidade, dificultando sua utilização em análises integradas e no desenvolvimento de soluções baseadas em dados. Este trabalho apresenta a construção de uma base integrada de inteligência de vulnerabilidades destinada a apoiar pesquisas sobre predição de exploração ativa e priorização de remediação. O processo envolve a coleta, transformação, normalização e integração de dados provenientes de múltiplas fontes públicas, resultando em um dataset estruturado e enriquecido com atributos relevantes para análise de risco. Além de descrever a metodologia adotada, o artigo apresenta uma caracterização detalhada do conjunto de dados, procedimentos de validação técnica e de qualidade, bem como uma discussão sobre seu potencial de reúso em aplicações acadêmicas e industriais. Por fim, o dataset é disponibilizado publicamente, contribuindo para a reprodutibilidade de pesquisas e para o avanço de estudos na área de gestão de vulnerabilidades e inteligência de ameaças.
+\end{resumo}
 
-\section{Próximos passos}
+\newpage
 
-Os arquivos reais do artigo podem ser adicionados gradualmente e incluídos a partir deste ponto de entrada único.
+\input{sections/introduction}
+
+\subsection{Referências}
+
+\cite{sandel:2015}.
+
+\bibliographystyle{main}
+\bibliography{main}
 
 \end{document}
