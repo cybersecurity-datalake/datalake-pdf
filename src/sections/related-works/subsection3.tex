@@ -1,0 +1,17 @@
+\subsection{Literatura Vigente}
+
+A literatura sobre vulnerabilidades e priorização de correções converge em três eixos principais: predição de exploração, avaliação crítica do CVSS e integração/qualidade de dados.
+
+Bozorgi et al. (2010) estão entre os trabalhos iniciais a demonstrar que atributos públicos de vulnerabilidades podem ser usados para classificar vulnerabilidades e prever exploração com desempenho superior a heurísticas simples. O trabalho reforça a importância de dados estruturados, históricos e reutilizáveis. Entretanto, seu contexto é anterior ao amadurecimento de fontes como EPSS, GitHub Advisory Database, OSV e CISA KEV, o que limita sua capacidade de representar o ecossistema atual.
+
+Zhang et al. (2011) analisam o uso da NVD para prever vulnerabilidades em software e indicam que a base, isoladamente, possui poder preditivo limitado em muitos cenários. Esse resultado é importante para a presente proposta porque mostra que a NVD, embora central, não deve ser a única fonte de dados para análises de segurança.
+
+Allodi e Massacci (2012; 2014) investigam a relação entre scores de severidade e exploração real, argumentando que o uso isolado de CVSS como critério de priorização pode produzir baixa efetividade operacional. Esses estudos são fundamentais porque sustentam a necessidade de enriquecer severidade técnica com sinais de exploração, como PoCs, exploração observada e outros indicadores de ameaça.
+
+Sabottke et al. (2015) exploram sinais públicos, incluindo mídias sociais e metadados de vulnerabilidades, para prever exploração real. Embora o uso de dados sociais apresente desafios de reprodutibilidade e volatilidade, o trabalho reforça a hipótese de que sinais externos aos registros técnicos tradicionais podem melhorar a priorização.
+
+Jacobs et al. (2019) propõem o EPSS como uma abordagem aberta e orientada a dados para estimar probabilidade de exploração. Esse trabalho representa uma mudança importante: em vez de priorizar apenas por severidade, passa-se a considerar a probabilidade de uma vulnerabilidade ser explorada. Para o dataset proposto, o EPSS é uma camada essencial de enriquecimento, ainda que deva ser interpretado como componente de ameaça, não como medida completa de risco.
+
+Jiang et al. (2021) analisam inconsistências em repositórios de vulnerabilidades e mostram que problemas de qualidade de dados podem redirecionar incorretamente esforços de segurança. Essa conclusão se relaciona diretamente com a proposta deste trabalho, que preserva proveniência e busca preparar a reconciliação entre fontes heterogêneas.
+
+Trabalhos recentes sobre knowledge graphs, relações CVE-CWE-CPE e datasets derivados de OSV reforçam a importância de integrar identificadores e modelar relações entre vulnerabilidades, fraquezas, produtos, pacotes e versões. Esses estudos indicam que a integração de bases não é apenas uma tarefa de engenharia, mas uma condição para permitir análises mais robustas, auditáveis e reprodutíveis.
