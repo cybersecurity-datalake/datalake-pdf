@@ -1,16 +1,16 @@
 \subsection{Fontes Públicas Vigentes}
 
-O CVE Program constitui a base de identificação do ecossistema, pois fornece o identificador comum usado para referenciar vulnerabilidades publicamente divulgadas. Seu papel é funcionar como âncora semântica entre diferentes fontes. Entretanto, o registro CVE, isoladamente, não resolve todas as necessidades analíticas, pois informações como severidade, fraqueza associada, produto afetado, exploração conhecida, probabilidade de exploração e versões corrigidas são distribuídas entre outras bases.
+O CVE Program constitui a base de identificação do ecossistema, pois fornece o identificador comum usado para referenciar vulnerabilidades publicamente divulgadas \cite{cve_program_overview}. Seu papel é funcionar como âncora semântica entre diferentes fontes. Entretanto, o registro CVE, isoladamente, não resolve todas as necessidades analíticas, pois informações como severidade, fraqueza associada, produto afetado, exploração conhecida, probabilidade de exploração e versões corrigidas são distribuídas entre outras bases.
 
-A National Vulnerability Database (NVD), mantida pelo NIST, complementa os registros CVE com informações técnicas padronizadas, incluindo métricas CVSS, categorias CWE, configurações CPE, referências e histórico de mudanças. Por isso, ela é frequentemente usada como núcleo técnico de estudos quantitativos sobre vulnerabilidades. Ainda assim, a NVD não deve ser tratada como fonte única. O próprio CVSS é uma medida de severidade, não de risco, e mudanças recentes na operação do NVD reforçam a necessidade de complementar seus dados com outras fontes. A partir de abril de 2026, o NIST passou a priorizar o enriquecimento de CVEs presentes no catálogo KEV da CISA, de softwares usados pelo governo federal dos Estados Unidos ou de softwares considerados críticos. Essa priorização tende a aumentar a assimetria de completude entre registros.
+A National Vulnerability Database (NVD), mantida pelo NIST, complementa os registros CVE com informações técnicas padronizadas, incluindo métricas CVSS, categorias CWE, configurações CPE, referências e histórico de mudanças \cite{nvd_home,first_cvss,mitre_cwe,nvd_cpe_dictionary}. Por isso, ela é frequentemente usada como núcleo técnico de estudos quantitativos sobre vulnerabilidades. Ainda assim, a NVD não deve ser tratada como fonte única. O próprio CVSS é uma medida de severidade, não de risco, e mudanças recentes na operação do NVD reforçam a necessidade de complementar seus dados com outras fontes \cite{nvd_cvss_metrics,nist_nvd_operations_2026}. A partir de 15 de abril de 2026, o NIST passou a priorizar o enriquecimento de CVEs presentes no catálogo KEV da CISA, de softwares usados pelo governo federal dos Estados Unidos ou de softwares considerados críticos \cite{nist_nvd_operations_2026}. Essa priorização tende a aumentar a assimetria de completude entre registros.
 
-O GitHub Advisory Database e o OSV ampliam a visão centrada em CVE/CPE ao representar vulnerabilidades no nível de ecossistemas de software, pacotes e faixas de versão. Essa granularidade é especialmente importante para estudos sobre software open source, cadeias de dependência e análise de versões vulneráveis ou corrigidas. Enquanto o GitHub Advisory Database agrega advisories com GHSA IDs, CVEs, CWEs, pacotes, ecossistemas, versões vulneráveis, versões corrigidas e severidade, o OSV propõe um formato estruturado para mapear vulnerabilidades diretamente a versões de pacotes ou commits.
+O GitHub Advisory Database e o OSV ampliam a visão centrada em CVE/CPE ao representar vulnerabilidades no nível de ecossistemas de software, pacotes e faixas de versão \cite{github_advisory_database_docs,github_advisory_database_repo,osv_database,osv_schema}. Essa granularidade é especialmente importante para estudos sobre software open source, cadeias de dependência e análise de versões vulneráveis ou corrigidas. Enquanto o GitHub Advisory Database agrega advisories com GHSA IDs, CVEs, CWEs, pacotes, ecossistemas, versões vulneráveis, versões corrigidas e severidade \cite{github_advisory_database_docs}, o OSV propõe um formato estruturado para mapear vulnerabilidades diretamente a versões de pacotes ou commits \cite{osv_schema}.
 
-A CISA Known Exploited Vulnerabilities (KEV) acrescenta uma dimensão operacional distinta: a presença de uma vulnerabilidade no catálogo indica evidência de exploração conhecida. Essa informação é valiosa porque permite diferenciar vulnerabilidades apenas severas daquelas que já possuem exploração observada. No entanto, a ausência de um CVE no KEV não significa ausência de risco; significa apenas que a vulnerabilidade não foi incluída naquele catálogo.
+A CISA Known Exploited Vulnerabilities (KEV) acrescenta uma dimensão operacional distinta: a presença de uma vulnerabilidade no catálogo indica evidência de exploração conhecida \cite{cisa_kev_catalog}. Essa informação é valiosa porque permite diferenciar vulnerabilidades apenas severas daquelas que já possuem exploração observada. No entanto, a ausência de um CVE no KEV não significa ausência de risco; significa apenas que a vulnerabilidade não foi incluída naquele catálogo.
 
-O EPSS, por sua vez, fornece um score probabilístico que estima a chance de exploração de uma vulnerabilidade em curto prazo. Sua contribuição é complementar ao CVSS e ao KEV: enquanto o CVSS descreve severidade técnica e o KEV registra exploração conhecida, o EPSS estima probabilidade de exploração. Portanto, a combinação CVSS + KEV + EPSS é metodologicamente mais rica do que o uso isolado de qualquer uma dessas métricas.
+O EPSS, por sua vez, fornece um score probabilístico que estima a chance de exploração de uma vulnerabilidade em curto prazo \cite{first_epss}. Sua contribuição é complementar ao CVSS e ao KEV: enquanto o CVSS descreve severidade técnica, e o KEV registra exploração conhecida, o EPSS estima probabilidade de exploração \cite{first_cvss,nvd_cvss_metrics,cisa_kev_catalog,first_epss}. Portanto, a combinação CVSS + KEV + EPSS é metodologicamente mais rica do que o uso isolado de qualquer uma dessas métricas.
 
-Outras fontes, como Exploit-DB, Vulners e VirusTotal, têm papéis diferentes. O Exploit-DB é relevante para identificar disponibilidade pública de exploits ou provas de conceito, mas não comprova exploração real em ambiente operacional. Vulners funciona como plataforma agregadora de inteligência de vulnerabilidades, mas possui restrições de acesso e licenciamento que reduzem sua adequação como fonte primária para um dataset acadêmico aberto. VirusTotal é útil para enriquecimento por IOCs, reputação e relações entre arquivos, URLs, domínios e IPs, mas não é uma base primária de CVEs.
+Outras fontes, como Exploit-DB, Vulners e VirusTotal, têm papéis diferentes. O Exploit-DB é relevante para identificar disponibilidade pública de exploits ou provas de conceito, mas não comprova exploração real em ambiente operacional \cite{exploitdb}. Vulners funciona como plataforma agregadora de inteligência de vulnerabilidades, mas possui restrições de acesso, API e licenciamento que reduzem sua adequação como fonte primária para um dataset acadêmico aberto \cite{vulners,vulners_api_docs}. VirusTotal é útil para enriquecimento por IOCs, reputação e relações entre arquivos, URLs, domínios e IPs, mas não é uma base primária de CVEs \cite{virustotal_api_v3}.
 
 \begin{table}[htbp]
     \centering
@@ -19,30 +19,34 @@ Outras fontes, como Exploit-DB, Vulners e VirusTotal, têm papéis diferentes. O
     \small
     \renewcommand{\arraystretch}{1.15}
     \resizebox{\textwidth}{!}{%
-    \begin{tabular}{|p{2.6cm}|p{2.5cm}|p{2.4cm}|p{3.2cm}|p{3.3cm}|p{3.3cm}|}
-        \hline
-        \textbf{Fonte} & \textbf{Escopo principal} & \textbf{Identificadores} & \textbf{Pontos fortes} & \textbf{Limitações} & \textbf{Papel no dataset integrado} \\
-        \hline
-        CVE Program / CVE List V5 & Registro canônico de vulnerabilidades publicamente divulgadas & CVE-ID & Autoridade do identificador, padronização e ampla adoção & Pouco enriquecimento técnico em comparação com NVD, EPSS, KEV e bases de advisories & Âncora primária para reconciliação entre fontes \\
-        \hline
-        NVD & Enriquecimento técnico padronizado & CVE, CVSS, CWE, CPE & Severidade, fraquezas, produtos afetados, configurações e referências & CVSS não mede risco; completude pode variar; priorização seletiva a partir de 2026 & Núcleo técnico para severidade, CWE, CPE e metadados \\
-        \hline
-        GitHub Advisory Database & Advisories de segurança, principalmente open source & GHSA, CVE, CWE & Pacote, ecossistema, versões vulneráveis/corrigidas e contexto de advisory & Cobertura concentrada em ecossistemas suportados; exige filtragem de malware e advisories não revisados & Camada package-centric e open source \\
-        \hline
-        OSV & Vulnerabilidades open source por pacote, versão e commit & OSV ID, CVE, GHSA & Boa semântica de versões e integração multi-ecossistema & Menos adequado para produtos generalistas fora do modelo de pacotes & Complemento para ranges, versões e ecossistemas \\
-        \hline
-        CISA KEV & Vulnerabilidades com exploração conhecida & CVE & Sinal operacional forte de exploração confirmada & Cobertura seletiva e binária & Rótulo de exploração conhecida \\
-        \hline
-        EPSS & Probabilidade de exploração & CVE & Score probabilístico e histórico diário & Mede ameaça/probabilidade, não risco completo & Camada preditiva de exploração \\
-        \hline
-        Exploit-DB & Exploits públicos e provas de conceito & EDB-ID, CVE quando disponível & Evidência de exploit público & PoC não equivale a exploração real; cobertura incompleta & Enriquecimento sobre disponibilidade de exploit \\
-        \hline
-        Vulners & Inteligência agregada de vulnerabilidades & IDs internos, CVE, CPE & Correlação multi-fonte & Restrições de API, plano e licença & Enriquecimento opcional \\
-        \hline
-        VirusTotal & Threat intelligence e IOCs & Hash, URL, domínio, IP & Reputação e relações entre artefatos & Não é CVE-first; API pública limitada & Enriquecimento complementar por IOC \\
-        \hline
-    \end{tabular}%
+        \begin{tabular}{|p{2.6cm}|p{2.5cm}|p{2.4cm}|p{3.2cm}|p{3.3cm}|p{3.3cm}|}
+            \hline
+            \textbf{Fonte}            & \textbf{Escopo principal}                                     & \textbf{Identificadores}      & \textbf{Pontos fortes}                                                     & \textbf{Limitações}                                                                                     & \textbf{Papel no dataset integrado}                  \\
+            \hline
+            CVE Program / CVE List V5 & Registro canônico de vulnerabilidades publicamente divulgadas & CVE-ID                        & Autoridade do identificador, padronização e ampla adoção                   & Pouco enriquecimento técnico em comparação com NVD, EPSS, KEV e bases de advisories                     & Âncora primária para reconciliação entre fontes      \\
+            \hline
+            NVD                       & Enriquecimento técnico padronizado                            & CVE, CVSS, CWE, CPE           & Severidade, fraquezas, produtos afetados, configurações e referências      & CVSS não mede risco; completude pode variar; priorização seletiva a partir de 2026                      & Núcleo técnico para severidade, CWE, CPE e metadados \\
+            \hline
+            GitHub Advisory Database  & Advisories de segurança, principalmente open source           & GHSA, CVE, CWE                & Pacote, ecossistema, versões vulneráveis/corrigidas e contexto de advisory & Cobertura concentrada em ecossistemas suportados; exige filtragem de malware e advisories não revisados & Camada package-centric e open source                 \\
+            \hline
+            OSV                       & Vulnerabilidades open source por pacote, versão e commit      & OSV ID, CVE, GHSA             & Boa semântica de versões e integração multi-ecossistema                    & Menos adequado para produtos generalistas fora do modelo de pacotes                                     & Complemento para ranges, versões e ecossistemas      \\
+            \hline
+            CISA KEV                  & Vulnerabilidades com exploração conhecida                     & CVE                           & Sinal operacional forte de exploração confirmada                           & Cobertura seletiva e binária                                                                            & Rótulo de exploração conhecida                       \\
+            \hline
+            EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & Mede ameaça/probabilidade, não risco completo                                                           & Camada preditiva de exploração                       \\
+            \hline
+            Exploit-DB                & Exploits públicos e provas de conceito                        & EDB-ID, CVE quando disponível & Evidência de exploit público                                               & PoC não equivale a exploração real; cobertura incompleta                                                & Enriquecimento sobre disponibilidade de exploit      \\
+            \hline
+            Vulners                   & Inteligência agregada de vulnerabilidades                     & IDs internos, CVE, CPE        & Correlação multi-fonte                                                     & Restrições de API, plano e licença                                                                      & Enriquecimento opcional                              \\
+            \hline
+            VirusTotal                & Threat intelligence e IOCs                                    & Hash, URL, domínio, IP        & Reputação e relações entre artefatos                                       & Não é CVE-first; API pública limitada                                                                   & Enriquecimento complementar por IOC                  \\
+            \hline
+        \end{tabular}%
     }
+
+    \vspace{0.2cm}
+    {\footnotesize\textit{Fonte: elaboração própria com base nas documentações oficiais das fontes analisadas \cite{cve_program_overview,nvd_home,github_advisory_database_docs,github_advisory_database_repo,osv_database,osv_schema,cisa_kev_catalog,first_epss,exploitdb,vulners,vulners_api_docs,virustotal_api_v3}.}}
+
 \end{table}
 
-Essa comparação evidencia que nenhuma fonte, isoladamente, cobre de forma satisfatória todas as dimensões necessárias para pesquisa acadêmica em vulnerabilidades. O CVE fornece identidade; o NVD fornece severidade e enriquecimento técnico; o GitHub Advisory Database e o OSV fornecem granularidade por pacote; o KEV indica exploração conhecida; o EPSS estima probabilidade de exploração; e fontes como Exploit-DB, Vulners e VirusTotal adicionam sinais contextuais. Logo, o ganho científico do dataset proposto está na integração dessas camadas sob uma estrutura comum de ingestão, proveniência e normalização.
+Essa comparação evidencia que nenhuma fonte, isoladamente, cobre de forma satisfatória todas as dimensões necessárias para pesquisa acadêmica em vulnerabilidades. O CVE fornece identidade; o NVD fornece severidade e enriquecimento técnico; o GitHub Advisory Database e o OSV fornecem granularidade por pacote; o KEV indica exploração conhecida; o EPSS estima probabilidade de exploração; e fontes como Exploit-DB, Vulners e VirusTotal adicionam sinais contextuais \cite{cve_program_overview,nvd_home,github_advisory_database_docs,osv_database,osv_schema,cisa_kev_catalog,first_epss,exploitdb,vulners,virustotal_api_v3}.
