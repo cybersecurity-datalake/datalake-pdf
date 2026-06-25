@@ -1,0 +1,44 @@
+\subsection{Posicionamento, contribuição e lacunas atendidas pela implementação}
+
+A proposta deste trabalho se posiciona como um protótipo acadêmico de integração de dados públicos de vulnerabilidades, com foco na ingestão bruta, preservação de proveniência e exploração inicial de schemas. Seu objetivo não é substituir bases consolidadas como CVE, NVD, CISA KEV ou GitHub Advisory Database, mas combiná-las em uma estrutura reprodutível que permita análises posteriores mais completas do que aquelas possíveis a partir de fontes isoladas.
+
+A implementação atual contempla fontes com diferentes formas de acesso e organização: download de feed público, consumo de arquivo bulk, API paginada e leitura de repositório local clonado. A extração da CISA KEV captura vulnerabilidades com exploração conhecida; a CVE List V5 fornece registros canônicos em formato bruto; a NVD adiciona enriquecimento técnico, como CVSS, CWE, referências e metadados estruturados; e o GitHub Advisory Database contribui com uma visão orientada a ecossistemas de software, pacotes, versões vulneráveis e versões corrigidas.
+
+O principal diferencial do repositório está em tratar a heterogeneidade das fontes como parte central do problema de pesquisa. Cada base possui escopo, estrutura e semântica próprios: algumas são centradas no identificador CVE, outras em advisories, pacotes, versões ou sinais de exploração. Por isso, a integração exige mais do que coleta: requer preservação dos dados originais, registro de metadados de execução, normalização inicial orientada por fonte e inspeção sistemática dos schemas produzidos.
+
+Nesse sentido, a ferramenta de inspeção baseada em DuckDB complementa os extratores ao permitir uma etapa de reconhecimento estrutural dos dados. Essa etapa é relevante porque antecede a construção de camadas Silver e Gold: antes de propor um modelo analítico integrado, é necessário compreender a forma, a completude, a granularidade e a variabilidade dos dados brutos de cada fonte.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Lacunas das fontes existentes e resposta da implementação}
+    \label{tab:lacunas-resposta-implementacao}
+    \small
+    \renewcommand{\arraystretch}{1.15}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|p{3.0cm}|p{3.1cm}|p{3.7cm}|p{3.2cm}|}
+            \hline
+            \textbf{Lacuna observada}                & \textbf{Consequência para pesquisa}                        & \textbf{Resposta atual do repositório}                    & \textbf{Evolução necessária}                             \\
+            \hline
+            Fontes usam modelos de dados diferentes  & Dificulta comparação e fusão                               & Extratores separados por fonte e inspeção de schemas      & Criar camada Silver com modelo canônico                  \\
+            \hline
+            CVSS não representa risco completo       & Priorização pode ser enviesada                             & NVD coleta CVSS, KEV coleta exploração conhecida          & Integrar EPSS e Exploit-DB                               \\
+            \hline
+            Bases têm granularidades diferentes      & CVE, pacote, CPE e advisory não se alinham automaticamente & GitHub Advisory extrai pacotes, ranges e CVEs associados  & Integrar OSV e resolver entidades entre CVE/GHSA/OSV/CPE \\
+            \hline
+            APIs têm limites e instabilidade         & Coletas longas podem falhar                                & NVD possui rate limiting, retries e checkpointing         & Generalizar mecanismo para demais APIs                   \\
+            \hline
+            Dados mudam ao longo do tempo            & Estudos podem ser irreprodutíveis                          & Metadados de execução e outputs datados                   & Versionamento formal de snapshots                        \\
+            \hline
+            README descreve arquitetura aspiracional & Risco de superestimar maturidade                           & Implementação real é Bronze/profiling                     & Alinhar documentação ao estágio atual                    \\
+            \hline
+            Ausência de Silver/Gold                  & Ainda não há dataset analítico final                       & Bronze e schema reconnaissance parcialmente implementados & Criar transformações, testes e notebooks                 \\
+            \hline
+        \end{tabular}%
+    }
+\end{table}
+
+A principal contribuição da implementação é, portanto, oferecer uma base inicial para integração reprodutível de dados de vulnerabilidades. O uso isolado da CVE List V5 forneceria boa cobertura canônica, mas pouco enriquecimento técnico. O uso isolado da NVD traria severidade, fraquezas e configurações, mas não resolveria completamente exploração real, pacotes open source e faixas de versão. O uso isolado do GitHub Advisory Database traria maior granularidade para ecossistemas de software, mas não cobriria todo o universo de CVEs. Já a CISA KEV fornece um sinal operacional importante, porém seletivo, de exploração conhecida.
+
+Ao reunir essas fontes, o projeto cria uma base mais adequada para perguntas analíticas como: vulnerabilidades críticas são também as mais exploradas? Quais CWEs aparecem com maior frequência em vulnerabilidades presentes no KEV? Quais ecossistemas concentram mais advisories com versões corrigidas? Como se relacionam severidade, exploração conhecida, pacote afetado e histórico de publicação?
+
+Dessa forma, o trabalho deve ser entendido como uma etapa inicial, mas cientificamente justificável, de um data lake de vulnerabilidades. A camada Bronze e a exploração de schemas já demonstram a viabilidade da integração multi-fonte; as camadas Silver e Gold permanecem como evolução futura. O valor do projeto está em reduzir a fragmentação entre bases públicas, preservar proveniência, explicitar diferenças estruturais e estabelecer uma fundação técnica para análises futuras sobre severidade, exploração, ecossistemas, tendências temporais e priorização de vulnerabilidades.
