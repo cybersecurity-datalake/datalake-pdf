@@ -1,11 +1,49 @@
-\subsection{Limitações Atuais de Bases de Dados de Vulnerabilidades}
+\subsection{Posicionamento, contribuição e lacunas atendidas pela implementação}
 
-A primeira limitação observada é a fragmentação estrutural. Bases como CVE e NVD organizam registros em torno do CVE-ID; GitHub Advisory Database e OSV frequentemente organizam informações em torno de pacotes, ecossistemas e faixas de versão; KEV organiza um subconjunto de vulnerabilidades com exploração conhecida; EPSS organiza scores probabilísticos por CVE; e VirusTotal trabalha com objetos como hashes, URLs, domínios e IPs. Sem uma camada de integração, essas fontes permanecem úteis individualmente, mas difíceis de combinar em análises consistentes.
+A revisão apresentada evidencia que os trabalhos existentes convergem para um objetivo comum: produzir melhores mecanismos de análise, predição e priorização de vulnerabilidades a partir da combinação de diferentes informações públicas. Entretanto, também demonstra que nenhuma fonte individual reúne todas as dimensões necessárias para esse tipo de análise e que a integração entre bases heterogêneas permanece um desafio técnico e científico relevante.
 
-A segunda limitação está na diferença entre severidade e exploração. A literatura mostra que vulnerabilidades com alta severidade técnica nem sempre correspondem às vulnerabilidades mais exploradas. O CVSS é útil para medir gravidade, mas não deve ser usado como indicador direto de risco. Por isso, decisões baseadas apenas em CVSS podem superpriorizar vulnerabilidades severas, mas pouco exploráveis, e subpriorizar vulnerabilidades moderadas com alta atividade de exploração. A integração de CVSS, KEV, EPSS e evidências de exploit público reduz essa limitação ao combinar severidade, exploração conhecida, probabilidade de exploração e disponibilidade de PoC.
+Nesse contexto, este trabalho posiciona-se como uma proposta de integração reprodutível de dados públicos de vulnerabilidades, com foco na preservação da proveniência, na coleta automatizada de múltiplas fontes e na preparação de uma base que possa servir de fundamento para estudos futuros sobre exploração ativa, análise de risco e priorização de remediação.
 
-A terceira limitação envolve qualidade, inconsistência e completude dos metadados. Estudos empíricos indicam que divergências entre CVE, NVD e fontes de fornecedores podem impactar decisões de priorização. Isso é particularmente crítico quando atributos como CWE, CPE, versão afetada, patch disponível ou severidade aparecem incompletos, contraditórios ou atrasados. Para um dataset integrado, isso implica a necessidade de preservar a fonte de cada atributo, registrar timestamps de extração e manter uma política explícita para conflitos.
+O pipeline contempla fontes com diferentes formas de acesso e organização: download de feed público, consumo de arquivo bulk, API paginada e leitura de repositório local clonado. A extração da CISA KEV captura vulnerabilidades com exploração conhecida; a CVE List V5 fornece registros canônicos em formato bruto; a NVD adiciona enriquecimento técnico, como CVSS, CWE, referências e metadados estruturados; e o GitHub Advisory Database contribui com uma visão orientada a ecossistemas de software, pacotes, versões vulneráveis e versões corrigidas \cite{cisa_kev_catalog,cve_program_overview,nvd_home,first_cvss,mitre_cwe,github_advisory_database_docs,github_advisory_database_repo}.
 
-A quarta limitação é temporal. Vulnerabilidades são registros vivos: descrições, referências, scores, CPEs, CWEs e advisories podem ser alterados ao longo do tempo. Além disso, scores probabilísticos, como EPSS, mudam diariamente e podem sofrer descontinuidades quando o modelo é atualizado. Portanto, um dataset integrado deve ser versionado por snapshot, com metadados de coleta e possibilidade de reconstrução.
+O principal diferencial da proposta está em tratar a heterogeneidade dessas fontes como parte central do problema de pesquisa. Em vez de produzir apenas uma coleção de registros, o trabalho busca preservar os dados originais, registrar metadados de execução, manter a proveniência de cada informação e preparar uma estrutura capaz de evoluir para camadas posteriores de normalização e consolidação.
 
-A quinta limitação diz respeito à reprodutibilidade. Muitas bases relevantes possuem APIs com limites de requisição, autenticação ou restrições de uso. Outras são oferecidas como repositórios Git ou arquivos de download. Um dataset integrado precisa explicitar essas diferenças de acesso e adotar mecanismos que reduzam a dependência de estados voláteis das fontes, como checkpoints, metadados de execução e armazenamento de dados brutos.
+Nesse processo, a utilização do DuckDB desempenha papel importante na inspeção e caracterização dos dados coletados, permitindo compreender seus schemas, níveis de completude e diferenças estruturais antes da construção de um modelo analítico unificado. Essa abordagem é compatível com arquiteturas de lakehouse baseadas em camadas Bronze, Silver e Gold, nas quais os dados evoluem progressivamente desde sua forma bruta até conjuntos refinados para consumo analítico \cite{duckdb_why_duckdb,raasveldt2019_duckdb}.
+
+Assim, a principal contribuição do pipeline final consiste em estabelecer uma base técnica reprodutível para integração de múltiplas fontes públicas de vulnerabilidades. Embora o projeto ainda represente uma etapa inicial dessa arquitetura, ele fornece uma fundação consistente para futuras evoluções envolvendo normalização, enriquecimento, integração semântica e construção de datasets analíticos voltados à pesquisa em segurança cibernética.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Lacunas das fontes existentes e resposta da implementação}
+    \label{tab:lacunas-resposta-implementacao}
+    \small
+    \renewcommand{\arraystretch}{1.15}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|p{3.0cm}|p{3.1cm}|p{3.7cm}|p{3.2cm}|}
+            \hline
+            \textbf{Lacuna observada}                & \textbf{Consequência para pesquisa}                        & \textbf{Resposta atual do repositório}                    & \textbf{Evolução necessária}                             \\
+            \hline
+            Fontes usam modelos de dados diferentes  & Dificulta comparação e fusão                               & Extratores separados por fonte e inspeção de schemas      & Criar camada Silver com modelo canônico                  \\
+            \hline
+            CVSS não representa risco completo       & Priorização pode ser enviesada                             & NVD coleta CVSS, KEV coleta exploração conhecida          & Integrar EPSS e Exploit-DB                               \\
+            \hline
+            Bases têm granularidades diferentes      & CVE, pacote, CPE e advisory não se alinham automaticamente & GitHub Advisory extrai pacotes, ranges e CVEs associados  & Integrar OSV e resolver entidades entre CVE/GHSA/OSV/CPE \\
+            \hline
+            APIs têm limites e instabilidade         & Coletas longas podem falhar                                & NVD possui rate limiting, retries e checkpointing         & Generalizar mecanismo para demais APIs                   \\
+            \hline
+            Dados mudam ao longo do tempo            & Estudos podem ser irreprodutíveis                          & Metadados de execução e outputs datados                   & Versionamento formal de snapshots                        \\
+            \hline
+            README descreve arquitetura aspiracional & Risco de superestimar maturidade                           & Implementação real é Bronze/profiling                     & Alinhar documentação ao estágio atual                    \\
+            \hline
+            Ausência de Silver/Gold                  & Ainda não há dataset analítico final                       & Bronze e schema reconnaissance parcialmente implementados & Criar transformações, testes e notebooks                 \\
+            \hline
+        \end{tabular}%
+    }
+
+    \vspace{0.2cm}
+    \footnotesize
+    \textit{Fonte: elaboração própria, com base no estado atual da implementação e na documentação das fontes públicas analisadas \cite{databricks_medallion_architecture,jiang_2021_data_inconsistency,allodi_massacci_2014_cvss_exploits,first_epss}.}
+
+\end{table}
+
+Dessa forma, o trabalho deve ser compreendido como a etapa inicial de um data lake de vulnerabilidades. Demonstrando a viabilidade da integração entre diferentes fontes públicas, preservando sua proveniência e suas características estruturais, ao mesmo tempo em que estabelece a base necessária para futuras camadas de transformação e análise. Espera-se que essa infraestrutura possibilite estudos mais abrangentes sobre severidade, exploração, ecossistemas de software, evolução temporal das vulnerabilidades e priorização de remediação.
