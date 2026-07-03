@@ -1,9 +1,59 @@
 \section{Metodologia de Coleta e Processamento}
 
+Esta seção descreve o processo utilizado para construção do dataset proposto, incluindo as fontes de dados empregadas, as etapas de extração, transformação e integração das informações e a arquitetura adotada para armazenamento e disponibilização dos dados. O processo foi concebido para garantir reprodutibilidade, rastreabilidade e facilidade de atualização do conjunto de dados.
+
 \input{sections/methodology/selection}
+
 
 \subsection{Fontes dos Dados}
 
+\begin{table}[ht]
+    \centering
+    \caption{Fontes de dados utilizadas na construção do dataset.}
+    \label{tab:data_sources}
+    \small
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular}{|p{2.1cm}|p{2.7cm}|p{6.7cm}|p{2.0cm}|}
+        \hline
+        \textbf{Fonte}    & \textbf{Tipo}                     & \textbf{Informações obtidas}                                                                                                     & \textbf{Atualização} \\
+        \hline
+        CISA KEV          & Vulnerabilidades exploradas       & CVE, exploração ativa, data de inclusão e prazo de mitigação.                                                                    & Contínua             \\
+        \hline
+        CVE List V5       & Registro oficial                  & CVE, descrição, CNA, produtos afetados, referências e metadados.                                                                 & Contínua             \\
+        \hline
+        CWE               & Catálogo de fraquezas de software & Descrições das fraquezas, categorias, níveis de abstração, consequências, estratégias de mitigação e relacionamentos entre CWEs. & Periódica            \\
+        \hline
+        NVD               & Enriquecimento técnico            & CVSS, CWE, CPE, vetores de ataque e métricas de severidade.                                                                      & Contínua             \\
+        \hline
+        GitHub Advisories & Avisos Open Source                & Pacotes afetados, versões vulneráveis/corrigidas e referências.                                                                  & Contínua             \\
+        \hline
+    \end{tabular}
+\end{table}
+
 \subsection{Pipeline ETL/ELT}
+\label{sec:pipeline}
+
+O pipeline foi implementado integralmente em Python, utilizando o DuckDB como motor analítico \textit{in-memory} para as etapas de transformação e junção. A arquitetura segue um modelo em camadas: \textit{bronze} (dados brutos), \textit{silver} (dados integrados e limpos) e \textit{gold} (materialização em grafo de propriedades), organizadas no diretório \texttt{datalake/}.
+
+
+\subsubsection{Camada Bronze -- Extração}
+
+Cada fonte possui um script dedicado de extração. Para a \textbf{CISA KEV}, a coleta realiza uma requisição HTTP ao endpoint JSON oficial da agência, com política de retentativa exponencial via biblioteca \texttt{tenacity}. Para a \textbf{CVE List V5}, o script baixa o repositório oficial do CVEProject no GitHub em formato ZIP, percorre recursivamente os arquivos JSON e gera um arquivo JSONL consolidado.
+
+A extração do \textbf{NVD} utiliza a API REST 2.0 com paginação, controle de taxa, retentativa automática e suporte à coleta incremental. O processamento do \textbf{GitHub Advisories} realiza o \textit{flattening} das estruturas aninhadas e gera um conjunto tabular. A coleta do \textbf{CWE} é realizada a partir do portal oficial da MITRE, preservando os arquivos CSV originais para fins de rastreabilidade.
+
+\subsubsection{Camada Silver -- Transformação}
+
+A camada \textit{silver} realiza a limpeza, normalização e integração dos dados utilizando DuckDB. O processamento do CWE remove duplicidades, extrai relacionamentos entre fraquezas e gera relatórios de qualidade. O processamento das CVEs utiliza o NVD como fonte âncora, enriquecendo os registros com informações provenientes da CVE List V5, CISA KEV e GitHub Advisories.
+
+As junções são realizadas por \texttt{LEFT JOIN} utilizando o identificador CVE. Após a integração, são aplicadas etapas de padronização dos atributos, conversão de tipos, preenchimento de valores ausentes e gravação do resultado em \texttt{Parquet} com compressão Snappy.
+
+\subsubsection{Camada Gold -- Carga}
+
+A camada \textit{gold} é responsável pela carga dos dados no Neo4j. O processo cria ou atualiza os nós \texttt{:CVE}, \texttt{:CWE}, \texttt{:Package} e \texttt{:Reference}, além dos relacionamentos \texttt{HAS\_WEAKNESS}, \texttt{AFFECTS\_PACKAGE}, \texttt{HAS\_REFERENCE} e dos relacionamentos dinâmicos entre CWEs.
+
+São criados índices sobre os principais atributos de busca (\texttt{CVE.id}, \texttt{CWE.id}, \texttt{CVE.severity}, \texttt{Package.ecosystem} e \texttt{Reference.url}), garantindo melhor desempenho das consultas. A carga é idempotente, permitindo reexecuções sem duplicação de nós ou relacionamentos.
 
 \subsection{Arquitetura}
+
+
