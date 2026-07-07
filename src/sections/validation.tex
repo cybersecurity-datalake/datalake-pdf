@@ -1,3 +1,45 @@
 \section{Validação Técnica e Qualidade}
 
-TODO
+A construção do dataset envolveu uma série de procedimentos destinados a garantir a consistência, integridade e padronização dos dados provenientes das diferentes fontes utilizadas. Essas validações foram incorporadas ao pipeline de processamento e podem ser agrupadas em três etapas: limpeza dos dados, padronização dos atributos e integração das diferentes bases de vulnerabilidades.
+
+\subsection{Limpeza dos Dados}
+
+Na etapa de limpeza foram realizadas operações para remoção de inconsistências e tratamento de registros inválidos. As principais validações implementadas incluem:
+
+\begin{itemize}
+\item Filtragem das descrições das vulnerabilidades para considerar apenas registros no idioma inglês (\verb|lang = 'en'|) provenientes da NVD;
+\item Validação dos identificadores CWE utilizando expressões regulares (\verb|^CWE-[0-9]+$|), descartando entradas malformadas;
+\item Remoção de URLs duplicadas provenientes das bases NVD e GitHub Advisories por meio da função \verb|list_distinct|;
+\item Conversão do valor de severidade \verb|NONE| para \verb|UNKNOWN| utilizando \verb|COALESCE(NULLIF(...))|;
+\item Conversão explícita de valores nulos do atributo \verb|github_reviewed| para \verb|FALSE|;
+\item Identificação de registros contendo datas de publicação fora do intervalo esperado (2000--2030), permitindo detectar possíveis inconsistências nas bases de origem.
+\end{itemize}
+
+\subsection{Padronização dos Dados}
+
+Após a limpeza, os dados foram normalizados para garantir uniformidade entre as diferentes fontes de informação.
+
+As principais transformações realizadas foram:
+
+\begin{itemize}
+\item Padronização dos identificadores CVE utilizando letras maiúsculas (\verb|UPPER(cve_id)|);
+\item Conversão das datas de publicação para o tipo \verb|TIMESTAMP WITH TIME ZONE|;
+\item Unificação da classificação de severidade utilizando uma estratégia de prioridade entre as versões do CVSS (v3.1, v3.0, v4.0 e v2), empregando a função \verb|COALESCE|;
+\item Expansão dos registros do GitHub Advisories contendo múltiplos identificadores CVE por meio da operação \verb|UNNEST|, gerando um registro individual para cada vulnerabilidade;
+\item Associação consistente entre pacotes e seus respectivos ecossistemas utilizando estruturas do tipo \verb|STRUCT|, evitando desalinhamentos entre listas paralelas;
+\item Criação das variáveis booleanas \verb|in_github|, \verb|in_cisa_kev| e \verb|in_cve_list|, utilizadas para identificar a origem das informações incorporadas ao dataset.
+\end{itemize}
+
+\subsection{Integração dos Dados}
+
+A integração das diferentes fontes foi realizada utilizando uma estratégia baseada em uma entidade central (\textit{spine}) composta pelo conjunto de todos os identificadores CVE presentes nas bases consultadas.
+
+Essa abordagem permitiu preservar vulnerabilidades existentes em apenas uma das fontes, como vulnerabilidades recém-divulgadas ainda não sincronizadas com a NVD.
+
+As principais operações de integração incluem:
+
+\begin{itemize}
+\item Construção da espinha dorsal (\textit{spine}) por meio da união de todos os identificadores CVE utilizando a operação \verb|UNION|;
+\item Integração das demais fontes utilizando \verb|LEFT JOIN|, preservando registros exclusivos de cada base;
+\item Consolidação dos identificadores CWE provenientes da NVD e do GitHub por meio das funções \verb|flatten| e \verb|list_distinct|, eliminando duplicidades e reunindo todas as fraquezas associadas a uma vulnerabilidade.
+\end{itemize}
