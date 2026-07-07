@@ -1,0 +1,52 @@
+\section{Trabalhos Relacionados}
+
+A literatura sobre vulnerabilidades e priorização de correções pode ser organizada em três linhas principais: predição de exploração, crítica ao uso isolado de métricas de severidade e integração de dados heterogêneos. Trabalhos iniciais demonstraram que atributos públicos de vulnerabilidades podem apoiar modelos de classificação e predição de exploração, superando heurísticas simples em determinados cenários \cite{bozorgi2010_beyond_heuristics}. Entretanto, estudos baseados na NVD também indicaram limitações no uso de uma única fonte para prever riscos ou vulnerabilidades futuras, reforçando a necessidade de integrar informações adicionais ao registro técnico das CVEs \cite{zhang2011_nvd_predict,zhang2015_nvd_cyber_risks}.
+
+Outra linha relevante discute a diferença entre severidade técnica e exploração observada. Allodi e Massacci mostram que métricas como CVSS, embora úteis para estimar gravidade, não devem ser interpretadas como proxy direto de exploração ou risco operacional \cite{allodi2012_preliminary,allodi2014_case_control}. De forma complementar, Sabottke et al. exploram sinais públicos externos aos registros tradicionais, evidenciando que informações contextuais podem melhorar a predição de exploração real, ainda que apresentem desafios de volatilidade e reprodutibilidade \cite{sabottke2015_social_media}. A formalização do EPSS consolidou essa perspectiva ao propor uma métrica probabilística voltada à estimativa de exploração, complementando métricas de severidade como o CVSS \cite{jacobs2019_epss,jacobs2020_remediation,jacobs2021_epss}.
+
+Além da predição, estudos recentes destacam problemas de qualidade, inconsistência e integração entre bases públicas de vulnerabilidades. Jiang et al. mostram que divergências entre repositórios podem afetar decisões de priorização e remediação \cite{jiang2021_inconsistency}, enquanto abordagens baseadas em grafos de conhecimento indicam que relações entre CVE, CWE, CPE e outras entidades podem apoiar análises mais estruturadas de risco \cite{shi2024_threat_kg,yin2024_vulkg}. Em paralelo, trabalhos voltados a ecossistemas open source reforçam a importância de representar vulnerabilidades no nível de pacotes, versões afetadas e versões corrigidas, especialmente em bases como OSV e GitHub Advisory Database \cite{wu2024_affected_libraries,ruohonen2025_osv_propagation,mandl2026_osv_groundtruth}.
+
+Diante desse cenário, este trabalho posiciona-se como uma proposta de integração reprodutível de dados públicos de vulnerabilidades, combinando fontes voltadas à identificação, severidade, exploração conhecida e advisories de pacotes. Diferentemente de abordagens centradas em uma única base, o dataset proposto busca preservar a proveniência dos dados, registrar metadados de coleta e preparar uma estrutura extensível para análises futuras de exploração, risco e priorização de remediação.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Síntese dos trabalhos relacionados e lacunas abordadas}
+    \label{tab:related_work}
+    \small
+    \renewcommand{\arraystretch}{1.1}
+    \begin{tabular}{|p{3.0cm}|p{4.0cm}|p{4.2cm}|p{3.2cm}|}
+        \hline
+        \textbf{Referência}                                                                                                                               & \textbf{Contribuição} & \textbf{Limitação observada} & \textbf{Relação com este trabalho} \\
+        \hline
+        Bozorgi et al. \cite{bozorgi2010_beyond_heuristics}; Zhang et al. \cite{zhang2011_nvd_predict,zhang2015_nvd_cyber_risks}                          &
+        Uso de dados públicos para predição de exploração e risco.                                                                                        &
+        Uso limitado de fontes isoladas, principalmente NVD.                                                                                              &
+        Motiva a construção de uma base multi-fonte.                                                                                                                                                                                                  \\
+        \hline
+        Allodi e Massacci \cite{allodi2012_preliminary,allodi2014_case_control}; Sabottke et al. \cite{sabottke2015_social_media}                         &
+        Avaliação da relação entre severidade, sinais públicos e exploração real.                                                                         &
+        CVSS isolado não representa exploração; sinais externos podem ser voláteis.                                                                       &
+        Justifica combinar severidade com sinais de exploração e contexto.                                                                                                                                                                            \\
+        \hline
+        Jacobs et al. \cite{jacobs2019_epss,jacobs2020_remediation,jacobs2021_epss}                                                                       &
+        Proposição e formalização do EPSS para estimar probabilidade de exploração.                                                                       &
+        EPSS mede probabilidade de exploração, não risco completo.                                                                                        &
+        Motiva enriquecimento futuro com score probabilístico.                                                                                                                                                                                        \\
+        \hline
+        Jiang et al. \cite{jiang2021_inconsistency}; Nguyen e Massacci \cite{nguyen_massacci_2013_nvd_versions}                                           &
+        Análise de inconsistências e limitações de qualidade em bases públicas.                                                                           &
+        Metadados podem ser incompletos, divergentes ou desatualizados.                                                                                   &
+        Reforça a necessidade de proveniência e controle de qualidade.                                                                                                                                                                                \\
+        \hline
+        Shi et al. \cite{shi2024_threat_kg}; Yin et al. \cite{yin2024_vulkg}                                                                              &
+        Uso de grafos de conhecimento para relacionar CVE, CWE, CPE e entidades correlatas.                                                               &
+        Nem sempre integram sinais operacionais como KEV, EPSS e advisories de pacotes.                                                                   &
+        Apoia a modelagem futura do dataset como grafo de vulnerabilidades.                                                                                                                                                                           \\
+        \hline
+        Wu et al. \cite{wu2024_affected_libraries}; Ruohonen e Ramadan \cite{ruohonen2025_osv_propagation}; Mandl et al. \cite{mandl2026_osv_groundtruth} &
+        Análise de vulnerabilidades em ecossistemas open source, pacotes e versões.                                                                       &
+        Escopo frequentemente centrado em ecossistemas específicos.                                                                                       &
+        Motiva integração com bases orientadas a pacotes, como GHSA e OSV.                                                                                                                                                                            \\
+        \hline
+    \end{tabular}
+\end{table}

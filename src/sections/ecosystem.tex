@@ -1,0 +1,82 @@
+\section{Ecossistema de Dados Públicos de Vulnerabilidades}
+
+O ecossistema de inteligência de vulnerabilidades é composto por diversas bases públicas que disponibilizam informações complementares sobre identificação, severidade, exploração, produtos afetados e metadados técnicos. Embora essas fontes sejam amplamente utilizadas por pesquisadores e profissionais de segurança, cada uma foi desenvolvida com objetivos específicos, adotando diferentes modelos de dados, granularidades e mecanismos de atualização. Como consequência, nenhuma delas, isoladamente, fornece todas as informações necessárias para análises abrangentes de risco ou para a construção de modelos de predição de exploração.
+
+O CVE Program estabelece o identificador padronizado (CVE-ID) utilizado como referência comum entre diferentes bases. A National Vulnerability Database (NVD) complementa esses registros com informações técnicas, incluindo métricas CVSS, categorias CWE, configurações CPE e referências. Já o GitHub Advisory Database e o Open Source Vulnerabilities (OSV) ampliam essa visão ao representar vulnerabilidades no nível de pacotes, ecossistemas e versões de software, sendo especialmente relevantes para aplicações open source. A CISA Known Exploited Vulnerabilities (KEV) fornece evidências de exploração conhecida, enquanto o Exploit Prediction Scoring System (EPSS) estima a probabilidade de exploração em curto prazo. Fontes complementares, como Exploit-DB, Vulners e VirusTotal, adicionam informações sobre exploits públicos, inteligência agregada e indicadores de comprometimento. As principais características dessas bases são resumidas na Tabela \ref{tab:fontes-publicas}.
+
+
+\begin{table}[htbp]
+    \centering
+    \caption{Comparação entre fontes públicas}
+    \label{tab:fontes-publicas}
+    \small
+    \renewcommand{\arraystretch}{1.15}
+    {\hfuzz=3pt\resizebox{\textwidth}{!}{%
+            \begin{tabular}{|>{\raggedright\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{2.7cm}|>{\raggedright\arraybackslash}p{2.7cm}|>{\raggedright\arraybackslash}p{2.9cm}|>{\raggedright\arraybackslash}p{3.6cm}|}
+                \hline
+                \textbf{Fonte}            & \textbf{Escopo principal}                                     & \textbf{Identificadores}      & \textbf{Pontos fortes}                                                     & \textbf{Limitações}                                                                                     \\
+                \hline
+                CVE Program / CVE List V5 & Registro canônico de vulnerabilidades publicamente divulgadas & CVE-ID                        & Autoridade do identificador, padronização e ampla adoção                   & Pouco enriquecimento técnico em comparação com NVD, EPSS, KEV e bases de advisories                     \\
+                \hline
+                NVD                       & Enriquecimento técnico padronizado                            & CVE, CVSS, CWE, CPE           & Severidade, fraquezas, produtos afetados, configurações e referências      & CVSS não mede risco; completude pode variar; priorização seletiva a partir de 2026                      \\
+                \hline
+                GitHub Advisory Database  & Advisories de segurança, principalmente open source           & GHSA, CVE, CWE                & Pacote, ecossistema, versões vulneráveis/corrigidas e contexto de advisory & Cobertura concentrada em ecossistemas suportados; exige filtragem de malware e advisories não revisados \\
+                \hline
+                OSV                       & Vulnerabilidades open source por pacote, versão e commit      & OSV ID, CVE, GHSA             & Boa semântica de versões e integração multi-ecossistema                    & Menos adequado para produtos generalistas fora do modelo de pacotes                                     \\
+                \hline
+                CISA KEV                  & Vulnerabilidades com exploração conhecida                     & CVE                           & Sinal operacional forte de exploração confirmada                           & Cobertura seletiva e binária                                                                            \\
+                \hline
+                EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & Mede ameaça/probabilidade, não risco completo                                                           \\
+                \hline
+                Exploit-DB                & Exploits públicos e provas de conceito                        & EDB-ID, CVE quando disponível & Evidência de exploit público                                               & PoC não equivale a exploração real; cobertura incompleta                                                \\
+                \hline
+                Vulners                   & Inteligência agregada de vulnerabilidades                     & IDs internos, CVE, CPE        & Correlação multi-fonte                                                     & Restrições de API, plano e licença                                                                      \\
+                \hline
+                VirusTotal                & Threat intelligence e IOCs                                    & Hash, URL, domínio, IP        & Reputação e relações entre artefatos                                       & Não é CVE-first; API pública limitada                                                                   \\
+                \hline
+            \end{tabular}%
+        }}
+
+    \vspace{0.2cm}
+    {\footnotesize\textit{Fonte: elaboração própria com base nas documentações oficiais das fontes analisadas \cite{cve_program_overview,nvd_home,github_advisory_database_docs,github_advisory_database_repo,osv_database,osv_schema,cisa_kev_catalog,first_epss,exploitdb,vulners,vulners_api_docs,virustotal_api_v3}.}}
+
+\end{table}
+
+Apesar de sua relevância, essas fontes apresentam limitações importantes para aplicações analíticas. A principal delas é a fragmentação das informações, uma vez que atributos relacionados a severidade, exploração, pacotes afetados e inteligência de ameaças encontram-se distribuídos entre diferentes repositórios. Além disso, existem diferenças de granularidade, inconsistências entre metadados, atualizações assíncronas e restrições de acesso impostas por determinadas APIs, dificultando a integração automática e a reprodutibilidade dos experimentos. Outro aspecto importante é que métricas amplamente utilizadas, como o CVSS, representam severidade técnica, mas não necessariamente refletem o risco operacional ou a probabilidade de exploração de uma vulnerabilidade.
+
+Essas limitações evidenciam a necessidade de um processo de integração capaz de consolidar informações provenientes de múltiplas fontes, preservando sua proveniência e permitindo a construção de conjuntos de dados mais completos e reprodutíveis. Nesse contexto, o dataset proposto busca reunir diferentes perspectivas sobre uma mesma vulnerabilidade, reduzindo os impactos da fragmentação e preparando uma base adequada para análises de risco, priorização de remediação e pesquisas em inteligência de vulnerabilidades. A Tabela \ref{tab:lacunas-resposta-implementacao} sintetiza as principais lacunas observadas e a forma como são tratadas pelo dataset proposto.
+
+
+\begin{table}[htbp]
+    \centering
+    \caption{Lacunas das fontes existentes e resposta da implementação}
+    \label{tab:lacunas-resposta-implementacao}
+    \small
+    \renewcommand{\arraystretch}{1.15}
+    \resizebox{\textwidth}{!}{%
+        \begin{tabular}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.1cm}|>{\raggedright\arraybackslash}p{3.7cm}|>{\raggedright\arraybackslash}p{3.2cm}|}
+            \hline
+            \textbf{Lacuna observada}                & \textbf{Consequência para pesquisa}                        & \textbf{Resposta atual do repositório}                    & \textbf{Evolução necessária}                                                                 \\
+            \hline
+            Fontes usam modelos de dados diferentes  & Dificulta comparação e fusão                               & Extratores separados por fonte e inspeção de schemas      & Criar camada Silver com modelo canônico                                                      \\
+            \hline
+            CVSS não representa risco completo       & Priorização pode ser enviesada                             & NVD coleta CVSS, KEV coleta exploração conhecida          & Integrar EPSS e Exploit-DB                                                                   \\
+            \hline
+            Bases têm granularidades diferentes      & CVE, pacote, CPE e advisory não se alinham automaticamente & GitHub Advisory extrai pacotes, ranges e CVEs associados  & Integrar OSV e resolver entidades entre CVE/\allowbreak GHSA/\allowbreak OSV/\allowbreak CPE \\
+            \hline
+            APIs têm limites e instabilidade         & Coletas longas podem falhar                                & NVD possui rate limiting, retries e checkpointing         & Generalizar mecanismo para demais APIs                                                       \\
+            \hline
+            Dados mudam ao longo do tempo            & Estudos podem ser irreprodutíveis                          & Metadados de execução e outputs datados                   & Versionamento formal de snapshots                                                            \\
+            \hline
+            README descreve arquitetura aspiracional & Risco de superestimar maturidade                           & Implementação real é Bronze/profiling                     & Alinhar documentação ao estágio atual                                                        \\
+            \hline
+            Ausência de Silver/Gold                  & Ainda não há dataset analítico final                       & Bronze e schema reconnaissance parcialmente implementados & Criar transformações, testes e notebooks                                                     \\
+            \hline
+        \end{tabular}%
+    }
+
+    \vspace{0.2cm}
+    \footnotesize
+    \textit{Fonte: elaboração própria, com base no estado atual da implementação e na documentação das fontes públicas analisadas \cite{databricks_medallion_architecture,jiang_2021_data_inconsistency,allodi_massacci_2014_cvss_exploits,first_epss}.}
+
+\end{table}
