@@ -4,34 +4,6 @@ Esta seção descreve o processo utilizado para construção do dataset proposto
 
 \input{sections/methodology/selection}
 
-
-\subsection{Fontes de Dados}
-
-O dataset foi construído a partir da integração de cinco fontes públicas de vulnerabilidades, selecionadas por sua relevância, complementaridade e ampla utilização pela comunidade de segurança cibernética. Essas fontes fornecem informações sobre identificação de vulnerabilidades, métricas de severidade, fraquezas de software, exploração conhecida e pacotes afetados, permitindo reunir diferentes perspectivas sobre uma mesma vulnerabilidade. A Tabela~\ref{tab:data_sources} resume as fontes utilizadas, o tipo de informação obtida e sua frequência de atualização.
-
-\begin{table}[ht]
-    \centering
-    \caption{Fontes de dados utilizadas na construção do dataset.}
-    \label{tab:data_sources}
-    \small
-    \setlength{\tabcolsep}{4pt}
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}p{2.7cm}|>{\raggedright\arraybackslash}p{6.7cm}|>{\raggedright\arraybackslash}p{2.0cm}|}
-        \hline
-        \textbf{Fonte}    & \textbf{Tipo}                     & \textbf{Informações obtidas}                                                                                                     & \textbf{Atualização} \\
-        \hline
-        CISA KEV          & Vulnerabilidades exploradas       & CVE, exploração ativa, data de inclusão e prazo de mitigação.                                                                    & Contínua             \\
-        \hline
-        CVE List V5       & Registro oficial                  & CVE, descrição, CNA, produtos afetados, referências e metadados.                                                                 & Contínua             \\
-        \hline
-        CWE               & Catálogo de fraquezas de software & Descrições das fraquezas, categorias, níveis de abstração, consequências, estratégias de mitigação e relacionamentos entre CWEs. & Periódica            \\
-        \hline
-        NVD               & Enriquecimento técnico            & CVSS, CWE, CPE, vetores de ataque e métricas de severidade.                                                                      & Contínua             \\
-        \hline
-        GitHub Advisories & Avisos Open Source                & Pacotes afetados, versões vulneráveis/corrigidas e referências.                                                                  & Contínua             \\
-        \hline
-    \end{tabular}
-\end{table}
-
 \subsection{Pipeline ETL/ELT}
 \label{sec:pipeline}
 

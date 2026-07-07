@@ -1,124 +1,48 @@
-\subsection{Estratégia de Identificação e Seleção de Fontes}
+\subsection{Seleção das Fontes de Dados}
 
-A seleção das fontes de dados foi conduzida por meio de uma busca exploratória em mecanismos de pesquisa, repositórios públicos e documentações oficiais relacionadas à segurança cibernética e vulnerabilidades de software. O objetivo foi identificar bases públicas que disponibilizassem informações estruturadas sobre vulnerabilidades, exploração conhecida, severidade, advisories de segurança e demais atributos relevantes para a construção de um dataset integrado.
+A seleção das fontes de dados foi conduzida por meio de uma busca exploratória em mecanismos de pesquisa, repositórios públicos e documentações oficiais relacionadas à segurança cibernética e vulnerabilidades de software. O objetivo foi identificar bases públicas capazes de fornecer informações complementares sobre identificação de vulnerabilidades, severidade, exploração conhecida, fraquezas de software e pacotes afetados, passíveis de integração por meio de identificadores compartilhados.
 
-As buscas foram realizadas utilizando mecanismos de pesquisa gerais, bases bibliográficas e plataformas de desenvolvimento colaborativo, incluindo Google Search, Google Scholar, GitHub Search e as documentações oficiais das organizações mantenedoras das bases analisadas. As consultas utilizaram combinações de termos relacionados a vulnerabilidades, inteligência de ameaças, bancos de dados públicos e APIs de segurança, tais como \textit{cybersecurity vulnerability datasets}, \textit{public vulnerability database}, \textit{CVE dataset}, \textit{NVD API}, \textit{GitHub Advisory Database}, \textit{OSV dataset}, \textit{EPSS dataset} e \textit{Known Exploited Vulnerabilities}.
+As fontes candidatas foram avaliadas quanto à disponibilidade pública dos dados, documentação técnica, forma de acesso (APIs, feeds, arquivos ou repositórios Git), frequência de atualização, granularidade das informações, restrições de licenciamento e potencial de reutilização em pesquisas acadêmicas. Foram consideradas apenas bases que disponibilizassem acesso aberto aos metadados e permitissem integração com outras fontes utilizando identificadores padronizados, principalmente o CVE-ID.
 
-Após a identificação inicial das fontes candidatas, cada base foi analisada individualmente quanto à disponibilidade pública dos dados, forma de acesso (API, feeds ou repositórios Git), documentação oficial, frequência de atualização, granularidade das informações, existência de identificadores padronizados e possibilidade de reutilização em pesquisas acadêmicas.
+Ao final do processo, foram identificadas inicialmente 30 bases públicas, das quais 10 foram analisadas tecnicamente e 7 selecionadas para análise comparativa. A versão atual do datalake implementa quatro dessas fontes: CISA Known Exploited Vulnerabilities (KEV), CVE List V5, National Vulnerability Database (NVD) e GitHub Advisory Database. Além dessas, o modelo de dados prevê a futura incorporação de bases complementares, como CWE, OSV, EPSS, Exploit-DB e outras fontes de threat intelligence.
 
-Foram consideradas elegíveis apenas bases públicas que disponibilizassem acesso aberto aos metadados de vulnerabilidades ou inteligência complementar e que permitissem integração com outras fontes por meio de identificadores compartilhados. Bases exclusivamente comerciais, sem documentação pública ou sem possibilidade de reutilização dos dados foram descartadas durante essa etapa.
-
-Ao final do processo, nove fontes principais foram selecionadas para análise comparativa, das quais quatro já se encontram presentes na versão atual do datalake.
+As principais fontes utilizadas na implementação são apresentadas na Tabela~\ref{tab:data_sources}.
 
 \begin{table}[htbp]
     \centering
-    \caption{Principais strings utilizadas na busca exploratória das fontes públicas de vulnerabilidades}
-    \label{tab:search_strings}
+    \caption{Fontes implementadas na versão atual do dataset}
+    \label{tab:data_sources}
     \small
     \renewcommand{\arraystretch}{1.15}
-    \resizebox{\textwidth}{!}{%
-        \begin{tabular}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{12.8cm}|}
-            \hline
-            \textbf{Categoria}                 & \textbf{Consultas utilizadas}                                                                                                  \\
-            \hline
-            Bases públicas de vulnerabilidades &
-            cybersecurity vulnerability datasets; public vulnerability database; open vulnerability database; vulnerability intelligence datasets; threat intelligence datasets \\
-            \hline
-            CVE e NVD                          &
-            CVE dataset; CVE database API; CVE JSON feeds; MITRE CVE dataset; NVD dataset; National Vulnerability Database API                                                  \\
-            \hline
-            Exploração e priorização           &
-            CISA KEV dataset; Known Exploited Vulnerabilities dataset; EPSS dataset; Exploit Prediction Scoring System dataset; Exploit-DB dataset                              \\
-            \hline
-            Advisories e ecossistemas          &
-            GitHub Advisory Database; GitHub Security Advisories dataset; OSV dataset; Open Source Vulnerabilities dataset                                                      \\
-            \hline
-            Inteligência complementar          &
-            VirusTotal API; Vulners API; IOC datasets; threat intelligence API                                                                                                  \\
-            \hline
-            Literatura científica              &
-            datasets for vulnerability prediction; datasets for exploit prediction; vulnerability management datasets; public vulnerability databases comparison                \\
-            \hline
-        \end{tabular}%
-    }
+    \begin{tabular}{|p{3.2cm}|p{2.8cm}|p{6.5cm}|}
+        \hline
+        \textbf{Fonte}           &
+        \textbf{Forma de acesso} &
+        \textbf{Principais informações}                                                \\
+        \hline
 
-    \vspace{0.2cm}
-    {\footnotesize\textit{Fonte: elaboração própria.}}
+        CISA KEV                 &
+        JSON Feed                &
+        Exploração conhecida, data de inclusão, ação recomendada e prazo de mitigação. \\
 
+        \hline
+
+        CVE List V5              &
+        Repositório Git          &
+        Registro canônico de CVEs, descrições, produtos afetados e referências.        \\
+
+        \hline
+
+        NVD                      &
+        REST API                 &
+        CVSS, CWE, CPE, métricas de severidade e metadados técnicos.                   \\
+
+        \hline
+
+        GitHub Advisory Database &
+        Repositório Git          &
+        Pacotes afetados, ecossistemas, versões vulneráveis/corrigidas e advisories.   \\
+
+        \hline
+    \end{tabular}
 \end{table}
-
-\begin{table}[htbp]
-    \centering
-    \caption{Critérios utilizados para seleção das fontes públicas de dados}
-    \label{tab:selection_criteria}
-    \small
-    \renewcommand{\arraystretch}{1.15}
-    \resizebox{\textwidth}{!}{%
-        \begin{tabular}{|>{\raggedright\arraybackslash}p{7.2cm}|>{\raggedright\arraybackslash}p{7.2cm}|}
-            \hline
-            \textbf{Critérios de inclusão}                                     & \textbf{Critérios de exclusão} \\
-            \hline
-            Disponibilização pública dos dados                                 &
-            Base exclusivamente comercial ou sem acesso aberto                                                  \\
-            \hline
-            Documentação técnica oficial                                       &
-            Ausência de documentação ou especificação técnica                                                   \\
-            \hline
-            API pública, feeds ou arquivos para download                       &
-            Disponibilização apenas por interface web sem acesso aos dados                                      \\
-            \hline
-            Atualização periódica dos registros                                &
-            Base descontinuada ou sem manutenção identificável                                                  \\
-            \hline
-            Possibilidade de reutilização para pesquisa acadêmica              &
-            Restrições severas de licenciamento ou reutilização                                                 \\
-            \hline
-            Existência de identificadores padronizados (principalmente CVE-ID) &
-            Ausência de identificadores que permitam integração entre bases                                     \\
-            \hline
-            Complementaridade em relação às demais fontes selecionadas         &
-            Base redundante sem agregação de novos atributos relevantes                                         \\
-            \hline
-        \end{tabular}%
-    }
-
-    \vspace{0.2cm}
-    {\footnotesize\textit{Fonte: elaboração própria.}}
-
-\end{table}
-
-\begin{table}[htbp]
-    \centering
-    \caption{Resultado do processo de identificação e seleção das bases públicas}
-    \label{tab:selection_results}
-    \small
-    \renewcommand{\arraystretch}{1.15}
-    \resizebox{0.72\textwidth}{!}{%
-        \begin{tabular}{|>{\raggedright\arraybackslash}p{9.5cm}|c|}
-            \hline
-            \textbf{Etapa}                              & \textbf{Quantidade} \\
-            \hline
-            Bases públicas inicialmente identificadas   & 30                  \\
-            \hline
-            Bases analisadas tecnicamente               & 10                  \\
-            \hline
-            Bases selecionadas para análise comparativa & 7                   \\
-            \hline
-            Bases implementadas                         & 4                   \\
-            \hline
-        \end{tabular}%
-    }
-
-    \vspace{0.2cm}
-    {\footnotesize\textit{Fonte: elaboração própria.}}
-
-\end{table}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=1\textwidth]{images/datalake-diagram.png}
-    \caption{Diagrama do datalake proposto}
-    \label{fig:datalake_diagram}
-\end{figure}
-
-Ao término da etapa de seleção, observou-se que nenhuma base individual contempla simultaneamente informações sobre identificação, severidade, exploração conhecida, probabilidade de exploração, pacotes afetados e inteligência complementar. Esse resultado reforçou a necessidade da construção de um dataset integrado capaz de combinar informações provenientes de múltiplas fontes públicas, preservando a proveniência dos dados e possibilitando análises mais completas sobre vulnerabilidades de software.
