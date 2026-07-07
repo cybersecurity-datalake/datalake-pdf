@@ -59,6 +59,8 @@ ENTRY
     series
     title
     type
+    urldate
+    url
     volume
     year
   }
@@ -680,6 +682,36 @@ FUNCTION {misc}
   format.title output
   new.block
   howpublished output
+  new.block
+  note output
+  fin.entry
+}
+
+FUNCTION {format.url}
+{ url empty$
+    { "" }
+    { "\url{" url * "}" * }
+  if$
+}
+
+FUNCTION {format.urldate}
+{ urldate empty$
+    { "" }
+    { "Accessed on " urldate * }
+  if$
+}
+
+FUNCTION {online}
+{ output.bibitem
+  format.authors output
+  author format.key output				% special for
+  output.year.check					% apalike
+  new.block
+  format.title output
+  new.block
+  format.url output
+  new.block
+  format.urldate output
   new.block
   note output
   fin.entry
