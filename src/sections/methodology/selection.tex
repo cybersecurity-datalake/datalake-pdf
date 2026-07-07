@@ -4,47 +4,4 @@ A seleção das fontes de dados foi conduzida por meio de uma busca exploratóri
 
 As fontes candidatas foram avaliadas quanto à disponibilidade pública dos dados, documentação técnica, forma de acesso (APIs, feeds, arquivos ou repositórios Git), frequência de atualização, granularidade das informações, restrições de licenciamento e potencial de reutilização em pesquisas acadêmicas. Foram consideradas apenas bases que disponibilizassem acesso aberto aos metadados e permitissem integração com outras fontes utilizando identificadores padronizados, principalmente o CVE-ID.
 
-Ao final do processo, foram identificadas inicialmente 30 bases públicas, das quais 10 foram analisadas tecnicamente e 7 selecionadas para análise comparativa. A versão atual do datalake implementa quatro dessas fontes: CISA Known Exploited Vulnerabilities (KEV), CVE List V5, National Vulnerability Database (NVD) e GitHub Advisory Database. Além dessas, o modelo de dados prevê a futura incorporação de bases complementares, como CWE, OSV, EPSS, Exploit-DB e outras fontes de threat intelligence.
-
-As principais fontes utilizadas na implementação são apresentadas na Tabela~\ref{tab:data_sources}.
-
-\begin{table}[htbp]
-    \centering
-    \caption{Fontes implementadas na versão atual do dataset}
-    \label{tab:data_sources}
-    \small
-    \renewcommand{\arraystretch}{1.15}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{|>{\RaggedRight\arraybackslash}p{3.7cm}|>{\RaggedRight\arraybackslash}p{3.4cm}|>{\RaggedRight\arraybackslash}p{7.5cm}|}
-        \hline
-        \textbf{Fonte}           &
-        \textbf{Forma de acesso} &
-        \textbf{Principais informações}                                                \\
-        \hline
-
-        CISA KEV                 &
-        JSON Feed                &
-        Exploração conhecida, data de inclusão, ação recomendada e prazo de mitigação. \\
-
-        \hline
-
-        CVE List V5              &
-        Repositório Git          &
-        Registro canônico de CVEs, descrições, produtos afetados e referências.        \\
-
-        \hline
-
-        NVD                      &
-        REST API                 &
-        CVSS, CWE, CPE, métricas de severidade e metadados técnicos.                   \\
-
-        \hline
-
-        GitHub Advisory Database &
-        Repositório Git          &
-        Pacotes afetados, ecossistemas, versões vulneráveis/corrigidas e advisories.   \\
-
-        \hline
-    \end{tabular}
-    }
-\end{table}
+Ao final do processo, foram identificadas inicialmente 30 bases públicas, das quais 10 foram analisadas tecnicamente e 7 selecionadas para análise comparativa. A versão atual do dataset integra quatro fontes públicas complementares. O CISA Known Exploited Vulnerabilities (KEV) é acessado por meio de um \textit{JSON Feed} e fornece informações sobre exploração conhecida, data de inclusão, ação recomendada e prazo de mitigação. O CVE List V5, disponibilizado em um repositório Git, fornece o registro canônico de CVEs, incluindo descrições, produtos afetados e referências. A National Vulnerability Database (NVD) é acessada por meio de uma API REST e disponibiliza métricas CVSS, classificações CWE, identificadores CPE, métricas de severidade e metadados técnicos. Por fim, a GitHub Advisory Database, também disponibilizada em um repositório Git, fornece informações sobre pacotes afetados, ecossistemas, versões vulneráveis e corrigidas, além dos respectivos \textit{security advisories}.

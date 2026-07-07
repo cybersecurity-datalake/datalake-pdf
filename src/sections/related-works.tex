@@ -15,40 +15,40 @@ Diante desse cenário, este trabalho posiciona-se como uma proposta de integraç
     \small
     \renewcommand{\arraystretch}{1.1}
     \resizebox{\textwidth}{!}{%
-    \begin{tabular}{|>{\RaggedRight\arraybackslash}p{3.6cm}|>{\RaggedRight\arraybackslash}p{4.6cm}|>{\RaggedRight\arraybackslash}p{4.8cm}|>{\RaggedRight\arraybackslash}p{4.0cm}|}
-        \hline
-        \textbf{Referência}                                                                                                                               & \textbf{Contribuição} & \textbf{Limitação observada} & \textbf{Relação com este trabalho} \\
-        \hline
-        Bozorgi et al. \cite{bozorgi2010_beyond_heuristics}; Zhang et al. \cite{zhang2011_nvd_predict,zhang2015_nvd_cyber_risks}                          &
-        Uso de dados públicos para predição de exploração e risco.                                                                                        &
-        Uso limitado de fontes isoladas, principalmente NVD.                                                                                              &
-        Motiva a construção de uma base multi-fonte.                                                                                                                                                                                                  \\
-        \hline
-        Allodi e Massacci \cite{allodi2012_preliminary,allodi2014_case_control}; Sabottke et al. \cite{sabottke2015_social_media}                         &
-        Avaliação da relação entre severidade, sinais públicos e exploração real.                                                                         &
-        CVSS isolado não representa exploração; sinais externos podem ser voláteis.                                                                       &
-        Justifica combinar severidade com sinais de exploração e contexto.                                                                                                                                                                            \\
-        \hline
-        Jacobs et al. \cite{jacobs2019_epss,jacobs2020_remediation,jacobs2021_epss}                                                                       &
-        Proposição e formalização do EPSS para estimar probabilidade de exploração.                                                                       &
-        EPSS mede probabilidade de exploração, não risco completo.                                                                                        &
-        Motiva enriquecimento futuro com score probabilístico.                                                                                                                                                                                        \\
-        \hline
-        Jiang et al. \cite{jiang2021_inconsistency}; Nguyen e Massacci \cite{nguyen_massacci_2013_nvd_versions}                                           &
-        Análise de inconsistências e limitações de qualidade em bases públicas.                                                                           &
-        Metadados podem ser incompletos, divergentes ou desatualizados.                                                                                   &
-        Reforça a necessidade de proveniência e controle de qualidade.                                                                                                                                                                                \\
-        \hline
-        Shi et al. \cite{shi2024_threat_kg}; Yin et al. \cite{yin2024_vulkg}                                                                              &
-        Uso de grafos de conhecimento para relacionar CVE, CWE, CPE e entidades correlatas.                                                               &
-        Nem sempre integram sinais operacionais como KEV, EPSS e advisories de pacotes.                                                                   &
-        Apoia a modelagem futura do dataset como grafo de vulnerabilidades.                                                                                                                                                                           \\
-        \hline
-        Wu et al. \cite{wu2024_affected_libraries}; Ruohonen e Ramadan \cite{ruohonen2025_osv_propagation}; Mandl et al. \cite{mandl2026_osv_groundtruth} &
-        Análise de vulnerabilidades em ecossistemas open source, pacotes e versões.                                                                       &
-        Escopo frequentemente centrado em ecossistemas específicos.                                                                                       &
-        Motiva integração com bases orientadas a pacotes, como GHSA e OSV.                                                                                                                                                                            \\
-        \hline
-    \end{tabular}%
+        \begin{tabular}{|>{\RaggedRight\arraybackslash}p{3.6cm}|>{\RaggedRight\arraybackslash}p{4.6cm}|>{\RaggedRight\arraybackslash}p{4.8cm}|>{\RaggedRight\arraybackslash}p{4.0cm}|}
+            \hline
+            \textbf{Referência}                                                                 & \textbf{Contribuição} & \textbf{Limitação observada} & \textbf{Relação com este trabalho} \\
+            \hline
+            Bozorgi et al.; Zhang et al.                                                        &
+            Uso de dados públicos para predição de exploração e risco.                          &
+            Uso limitado de fontes isoladas, principalmente NVD.                                &
+            Motiva a construção de uma base multi-fonte.                                                                                                                                    \\
+            \hline
+            Allodi e Massacci; Sabottke et al.                                                  &
+            Avaliação da relação entre severidade, sinais públicos e exploração real.           &
+            CVSS isolado não representa exploração; sinais externos podem ser voláteis.         &
+            Justifica combinar severidade com sinais de exploração e contexto.                                                                                                              \\
+            \hline
+            Jacobs et al.                                                                       &
+            Proposição e formalização do EPSS para estimar probabilidade de exploração.         &
+            EPSS mede probabilidade de exploração, não risco completo.                          &
+            Motiva enriquecimento futuro com score probabilístico.                                                                                                                          \\
+            \hline
+            Jiang et al.; Nguyen e Massacci                                                     &
+            Análise de inconsistências e limitações de qualidade em bases públicas.             &
+            Metadados podem ser incompletos, divergentes ou desatualizados.                     &
+            Reforça a necessidade de proveniência e controle de qualidade.                                                                                                                  \\
+            \hline
+            Shi et al.; Yin et al.                                                              &
+            Uso de grafos de conhecimento para relacionar CVE, CWE, CPE e entidades correlatas. &
+            Nem sempre integram sinais operacionais como KEV, EPSS e advisories de pacotes.     &
+            Apoia a modelagem futura do dataset como grafo de vulnerabilidades.                                                                                                             \\
+            \hline
+            Wu et al.; Ruohonen e Ramadan; Mandl et al.                                         &
+            Análise de vulnerabilidades em ecossistemas open source, pacotes e versões.         &
+            Escopo frequentemente centrado em ecossistemas específicos.                         &
+            Motiva integração com bases orientadas a pacotes, como GHSA e OSV.                                                                                                              \\
+            \hline
+        \end{tabular}%
     }
 \end{table}

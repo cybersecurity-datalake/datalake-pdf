@@ -4,8 +4,17 @@ Esta seção descreve o processo utilizado para construção do dataset proposto
 
 \input{sections/methodology/selection}
 
+\subsection{Arquitetura}
+\label{subsec:arquitetura}
+
+A arquitetura do pipeline segue o padrão de camadas de maturidade de dados (\textit{medallion architecture}), organizando o fluxo em três estágios sucessivos, \textbf{bronze} (dados brutos), \textbf{silver} (dados processados e integrados) e \textbf{gold} (dados curados em grafo), cada um implementado como um estágio isolado do pipeline (extração, transformação e carga, respectivamente), conforme detalhado na Seção~\ref{subsec:pipeline}. A opção por essa arquitetura busca favorecer a rastreabilidade (é sempre possível recuperar o dado original na camada bronze), a modularidade (cada camada é produzida por um conjunto independente de scripts) e a reprodutibilidade do processo como um todo.
+
+O repositório do projeto reflete essa separação em sua estrutura de diretórios: \texttt{scripts/} concentra os módulos de extração, transformação, carga e análise; \texttt{datalake/} armazena fisicamente os dados segundo seu grau de maturidade; \texttt{config/} reúne parâmetros e variáveis globais; e \texttt{docs/} contém documentação técnica complementar.
+
+Do ponto de vista tecnológico, o pipeline foi implementado em Python 3.12+, com a biblioteca \textit{Requests} para consumo de APIs externas e arquivos YAML/dotenv para gerenciamento de configurações. O processamento é realizado com o DuckDB, motor SQL de alto desempenho para execução \textit{in-process}, enquanto a orquestração das etapas é feita via Apache Airflow, containerizado com Docker --- o que garante agendamento automatizado, reprodutibilidade e monitoramento centralizado das execuções, com logs persistidos tanto na interface do Airflow quanto em arquivos locais.
+
 \subsection{Pipeline ETL/ELT}
-\label{sec:pipeline}
+\label{subsec:pipeline}
 
 O pipeline foi implementado integralmente em Python, utilizando o DuckDB como motor analítico \textit{in-memory} para as etapas de transformação e junção. A arquitetura segue um modelo em camadas: \textit{bronze} (dados brutos), \textit{silver} (dados integrados e limpos) e \textit{gold} (materialização em grafo de propriedades), organizadas no diretório \texttt{datalake/}.
 
@@ -28,6 +37,5 @@ A camada \textit{gold} é responsável pela carga dos dados no Neo4j. O processo
 
 São criados índices sobre os principais atributos de busca (\texttt{CVE.id}, \texttt{CWE.id}, \texttt{CVE.severity}, \texttt{Package.ecosystem} e \texttt{Reference.url}), garantindo melhor desempenho das consultas. A carga é idempotente, permitindo reexecuções sem duplicação de nós ou relacionamentos.
 
-\subsection{Arquitetura}
 
 
