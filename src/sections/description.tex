@@ -1,260 +1,171 @@
 \section{Descrição do Dataset}
 
-Esta seção apresenta a descrição estrutural do dataset utilizado neste trabalho, abordando sua modelagem como um grafo de conhecimento no Neo4j. São detalhadas as entidades que compõem o modelo, seus respectivos atributos, relacionamentos e a forma como os dados são organizados logicamente.
+Esta seção apresenta a descrição estrutural do dataset utilizado neste trabalho, abordando sua modelagem como um grafo de conhecimento no Neo4j. São detalhadas as entidades que compõem o modelo, seus respectivos atributos, relacionamentos e a forma como os dados são organizados logicamente. 
 
 \subsection{Estrutura de Dados}
 O dataset é modelado como um grafo de conhecimento composto por quatro tipos de entidades principais e seus respectivos relacionamentos. Essa estrutura permite representar vulnerabilidades de software e suas interações com fraquezas, pacotes afetados e referências externas.
 
-
 \begin{table}[ht]
-    \centering
-    \caption{Entidades do grafo.}
-    \label{tab:entities}
-    \small
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{10cm}|}
-        \hline
-        \textbf{Entidade} & \textbf{Descrição}                                       \\
-        \hline
-        CVE               & Vulnerabilidades de software identificadas publicamente. \\
-        \hline
-        CWE               & Classes de fraquezas de software.                        \\
-        \hline
-        Package           & Pacotes de software afetados por vulnerabilidades.       \\
-        \hline
-        Reference         & Referências externas associadas às vulnerabilidades.     \\
-        \hline
-    \end{tabular}
+\centering
+\caption{Entidades do grafo.}
+\label{tab:entities}
+\small
+\begin{tabular}{|p{2.5cm}|p{10cm}|}
+\hline
+\textbf{Entidade} & \textbf{Descrição} \\
+\hline
+CVE & Vulnerabilidades de software identificadas publicamente. \\
+\hline
+CWE & Classes de fraquezas de software. \\
+\hline
+Package & Pacotes de software afetados por vulnerabilidades. \\
+\hline
+Reference & Referências externas associadas às vulnerabilidades. \\
+\hline
+\end{tabular}
 \end{table}
 
 \begin{table}[ht]
-    \centering
-    \caption{Relacionamentos do grafo.}
-    \label{tab:relationships}
-    \small
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{3.7cm}|>{\raggedright\arraybackslash}p{3.8cm}|>{\raggedright\arraybackslash}p{5.8cm}|}
-        \hline
-        \textbf{Relacionamento} & \textbf{Origem $\rightarrow$ Destino} & \textbf{Descrição}                                             \\
-        \hline
-        HAS\_WEAKNESS           & CVE $\rightarrow$ CWE                 & Associa uma vulnerabilidade às fraquezas correspondentes.      \\
-        \hline
-        AFFECTS\_PACKAGE        & CVE $\rightarrow$ Package             & Indica os pacotes afetados pela vulnerabilidade.               \\
-        \hline
-        HAS\_REFERENCE          & CVE $\rightarrow$ Reference           & Associa referências externas à vulnerabilidade.                \\
-        \hline
-        CWE-CWE                 & CWE $\rightarrow$ CWE                 & Relações entre fraquezas (CHILD\_OF, PEER\_OF, REQUIRES etc.). \\
-        \hline
-    \end{tabular}
+\centering
+\caption{Relacionamentos do grafo.}
+\label{tab:relationships}
+\small
+\begin{tabular}{|p{3.5cm}|p{3.8cm}|p{6cm}|}
+\hline
+\textbf{Relacionamento} & \textbf{Origem $\rightarrow$ Destino} & \textbf{Descrição} \\
+\hline
+HAS\_WEAKNESS & CVE $\rightarrow$ CWE & Associa uma vulnerabilidade às fraquezas correspondentes. \\
+\hline
+AFFECTS\_PACKAGE & CVE $\rightarrow$ Package & Indica os pacotes afetados pela vulnerabilidade. \\
+\hline
+HAS\_REFERENCE & CVE $\rightarrow$ Reference & Associa referências externas à vulnerabilidade. \\
+\hline
+CWE-CWE & CWE $\rightarrow$ CWE & Relações entre fraquezas (CHILD\_OF, PEER\_OF, REQUIRES etc.). \\
+\hline
+\end{tabular}
 \end{table}
 
-\subsection{Esquema de Dados}
-O esquema de dados define os atributos e seus respectivos tipos para cada entidade do grafo, sem incluir interpretação semântica dos dados.
+\subsection{Esquema e Dicionário de Dados}
+Essa seção define o esquema de dados e o dicionário de dados para cada entidade do grafo, sem incluir interpretação semântica dos dados.
 
 \subsubsection{CVE}
-A tabela a seguir apresenta os atributos da entidade CVE, incluindo seus tipos de dados.
+A entidade CVE representa as vulnerabilidades de software presentes no grafo. A Tabela~\ref{tab:cve} apresenta seus atributos, tipos de dados e respectivas descrições.
+
 \begin{table}[H]
-    \centering
-    \caption{Esquema da entidade Vulnerability}
-    \label{tab:vulnerability}
-    \begin{tabular}{|l|l|}
-        \hline
-        \textbf{Dado}         & \textbf{Tipo} \\ \hline
-        id                    & VARCHAR       \\ \hline
-        assigner              & VARCHAR       \\ \hline
-        published             & TIMESTAMP     \\ \hline
-        vulnerability\_name   & VARCHAR       \\ \hline
-        description           & VARCHAR       \\ \hline
-        severity              & VARCHAR       \\ \hline
-        exploitability\_score & DOUBLE        \\ \hline
-        impact\_score         & DOUBLE        \\ \hline
-        github\_reviewed      & BOOLEAN       \\ \hline
-        ransomware\_use       & VARCHAR       \\ \hline
-        required\_action      & VARCHAR       \\ \hline
-        in\_cve\_list         & BOOLEAN       \\ \hline
-        in\_github            & BOOLEAN       \\ \hline
-        in\_cisa\_kev         & BOOLEAN       \\ \hline
-    \end{tabular}
+\centering
+\caption{Esquema e dicionário de dados da entidade CVE}
+\label{tab:cve}
+\small
+\begin{tabular}{|p{3.3cm}|p{2cm}|p{8.7cm}|}
+\hline
+\textbf{Dado} & \textbf{Tipo} & \textbf{Descrição} \\ \hline
+id & VARCHAR & Identificador único da vulnerabilidade no formato CVE (ex.: CVE-2024-12345), proveniente da base NVD. \\ \hline
+assigner & VARCHAR & Organização responsável pelo registro da CVE. \\ \hline
+published & TIMESTAMP & Data de publicação da vulnerabilidade, obtida da NVD com fallback para CVE List 5. \\ \hline
+vulnerability\_name & VARCHAR & Nome descritivo da vulnerabilidade, obtido de GitHub Advisories ou CISA KEV. \\ \hline
+description & VARCHAR & Descrição detalhada da vulnerabilidade em linguagem natural. \\ \hline
+severity & VARCHAR & Classificação de severidade baseada em CVSS (CRITICAL, HIGH, MEDIUM, LOW, UNKNOWN). \\ \hline
+exploitability\_score & DOUBLE & Indicador numérico de facilidade de exploração. \\ \hline
+impact\_score & DOUBLE & Indicador numérico de impacto máximo da vulnerabilidade. \\ \hline
+github\_reviewed & BOOLEAN & Indica se a vulnerabilidade foi revisada pela GitHub Advisory Database. \\ \hline
+ransomware\_use & VARCHAR & Indica se a vulnerabilidade foi associada a campanhas de ransomware (CISA KEV). \\ \hline
+required\_action & VARCHAR & Ação recomendada de mitigação. \\ \hline
+in\_cve\_list & BOOLEAN & Indica presença na base NVD. \\ \hline
+in\_github & BOOLEAN & Indica presença no GitHub Advisories. \\ \hline
+in\_cisa\_kev & BOOLEAN & Indica presença no catálogo CISA KEV. \\ \hline
+\end{tabular}
 \end{table}
 
 \subsubsection{CWE}
-A tabela a seguir apresenta os atributos da entidade CWE, incluindo seus tipos de dados.
+A entidade CWE representa as classes de fraquezas de software associadas às vulnerabilidades. A Tabela~\ref{tab:cwe} apresenta os atributos utilizados para caracterizar essas fraquezas.
+
 \begin{table}[H]
-    \centering
-    \caption{Esquema da entidade CWE}
-    \label{tab:cwe}
-    \begin{tabular}{|l|l|}
-        \hline
-        \textbf{Dado}          & \textbf{Tipo} \\ \hline
-        id                     & VARCHAR       \\ \hline
-        name                   & VARCHAR       \\ \hline
-        cwe\_number            & INTEGER       \\ \hline
-        weakness\_abstraction  & VARCHAR       \\ \hline
-        description            & VARCHAR       \\ \hline
-        extended\_description  & VARCHAR       \\ \hline
-        related\_weaknesses    & VARCHAR       \\ \hline
-        applicable\_platforms  & VARCHAR       \\ \hline
-        background\_details    & VARCHAR       \\ \hline
-        common\_consequences   & VARCHAR       \\ \hline
-        detection\_methods     & VARCHAR       \\ \hline
-        potential\_mitigations & VARCHAR       \\ \hline
-        observed\_examples     & VARCHAR       \\ \hline
-        affected\_resources    & VARCHAR       \\ \hline
-        source\_labels         & VARCHAR[]     \\ \hline
-    \end{tabular}
+\centering
+\caption{Esquema e dicionário de dados da entidade CWE}
+\small
+\label{tab:cwe}
+\begin{tabular}{|p{3.3cm}|p{2cm}|p{8.7cm}|}
+\hline
+\textbf{Dado} & \textbf{Tipo} & \textbf{Descrição} \\ \hline
+id & VARCHAR & Identificador da fraqueza no padrão CWE (ex.: CWE-79). \\ \hline
+name & VARCHAR & Nome da fraqueza de software. \\ \hline
+cwe\_number & INTEGER & Identificador numérico da CWE. \\ \hline
+weakness\_abstraction & VARCHAR & Nível de abstração da fraqueza. \\ \hline
+description & VARCHAR & Descrição da fraqueza. \\ \hline
+extended\_description & VARCHAR & Descrição estendida com maior detalhamento. \\ \hline
+related\_weaknesses & VARCHAR & Relações com outras CWEs. \\ \hline
+applicable\_platforms & VARCHAR & Plataformas afetadas. \\ \hline
+background\_details & VARCHAR & Contexto adicional sobre a fraqueza. \\ \hline
+common\_consequences & VARCHAR & Consequências típicas da fraqueza. \\ \hline
+detection\_methods & VARCHAR & Métodos de detecção. \\ \hline
+potential\_mitigations & VARCHAR & Estratégias de mitigação. \\ \hline
+observed\_examples & VARCHAR & Exemplos reais observados. \\ \hline
+affected\_resources & VARCHAR & Recursos afetados. \\ \hline
+source\_labels & VARCHAR[] & Origem dos dados utilizados na construção do registro. \\ \hline
+\end{tabular}
 \end{table}
 
 \subsubsection{Package}
-A tabela a seguir apresenta os atributos da entidade Package, incluindo seus tipos de dados.
+A entidade Package armazena informações sobre os pacotes de software afetados pelas vulnerabilidades identificadas. Seus atributos são apresentados na Tabela~\ref{tab:package}.
 
 \begin{table}[H]
-    \centering
-    \caption{Esquema da entidade Package}
-    \label{tab:package}
-    \begin{tabular}{|l|l|}
-        \hline
-        \textbf{Dado} & \textbf{Tipo} \\ \hline
-        ecosystem     & VARCHAR       \\ \hline
-        package\_name & VARCHAR       \\ \hline
-    \end{tabular}
+\centering
+\caption{Esquema e dicionário de dados da entidade Package}
+\label{tab:package}
+\begin{tabular}{|p{3.3cm}|p{2cm}|p{8.7cm}|}
+\hline
+\textbf{Dado} & \textbf{Tipo} & \textbf{Descrição} \\ \hline
+ecosystem & VARCHAR & Ecossistema do pacote (ex.: npm, PyPI, Maven). \\ \hline
+package\_name & VARCHAR & Nome do pacote afetado. \\ \hline
+\end{tabular}
 \end{table}
 
 \subsubsection{Reference}
-A tabela a seguir apresenta os atributos da entidade Reference, incluindo seus tipos de dados.
+A entidade Reference reúne os links para documentos, avisos e outras fontes externas relacionadas às vulnerabilidades. A Tabela~\ref{tab:reference} apresenta os atributos dessa entidade.
 
 \begin{table}[H]
-    \centering
-    \caption{Esquema da entidade Reference}
-    \label{tab:reference}
-    \begin{tabular}{|l|l|}
-        \hline
-        \textbf{Dado} & \textbf{Tipo} \\ \hline
-        url           & VARCHAR       \\ \hline
-    \end{tabular}
+\centering
+\caption{Esquema e dicionário de dados da entidade Reference}
+\label{tab:reference}
+\begin{tabular}{|p{3.3cm}|p{2cm}|p{8.7cm}|}
+\hline
+\textbf{Dado} & \textbf{Tipo} & \textbf{Descrição} \\ \hline
+url & VARCHAR & Link de referência associado à vulnerabilidade. \\ \hline
+\end{tabular}
 \end{table}
-
-\subsection{Dicionário de Dados}
-
-O dicionário de dados descreve semanticamente os atributos presentes no dataset final, explicando seu significado e origem.
-
-\subsubsection{CVE}
-A tabela a seguir apresenta o dicionário de dados da entidade CVE, detalhando o significado de cada atributo.
-\begin{table}[H]
-    \centering
-    \caption{Dicionário de dados da entidade CVE}
-    \label{tab:dict-cve}
-    \small
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{10cm}|}
-        \hline
-        \textbf{Dado}         & \textbf{Descrição}                                                                                    \\ \hline
-        id                    & Identificador único da vulnerabilidade no formato CVE (ex.: CVE-2024-12345), proveniente da base NVD. \\ \hline
-        assigner              & Organização responsável pelo registro da CVE.                                                         \\ \hline
-        published             & Data de publicação da vulnerabilidade, obtida da NVD com fallback para CVE List 5.                    \\ \hline
-        vulnerability\_name   & Nome descritivo da vulnerabilidade, obtido de GitHub Advisories ou CISA KEV.                          \\ \hline
-        description           & Descrição detalhada da vulnerabilidade em linguagem natural.                                          \\ \hline
-        severity              & Classificação de severidade baseada em CVSS (CRITICAL, HIGH, MEDIUM, LOW, UNKNOWN).                   \\ \hline
-        exploitability\_score & Indicador numérico de facilidade de exploração.                                                       \\ \hline
-        impact\_score         & Indicador numérico de impacto máximo da vulnerabilidade.                                              \\ \hline
-        github\_reviewed      & Indica se a vulnerabilidade foi revisada pela GitHub Advisory Database.                               \\ \hline
-        ransomware\_use       & Indica se a vulnerabilidade foi associada a campanhas de ransomware (CISA KEV).                       \\ \hline
-        required\_action      & Ação recomendada de mitigação.                                                                        \\ \hline
-        in\_cve\_list         & Indica presença na base NVD.                                                                          \\ \hline
-        in\_github            & Indica presença no GitHub Advisories.                                                                 \\ \hline
-        in\_cisa\_kev         & Indica presença no catálogo CISA KEV.                                                                 \\ \hline
-    \end{tabular}
-\end{table}
-
-\subsubsection{CWE}
-A tabela a seguir apresenta o dicionário de dados da entidade CWE, detalhando o significado de cada atributo.
-\begin{table}[H]
-    \centering
-    \caption{Dicionário de dados da entidade CWE}
-    \label{tab:dict-cwe}
-    \small
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10cm}|}
-        \hline
-        \textbf{Dado}          & \textbf{Descrição}                                     \\ \hline
-        id                     & Identificador da fraqueza no padrão CWE (ex.: CWE-79). \\ \hline
-        name                   & Nome da fraqueza de software.                          \\ \hline
-        cwe\_number            & Identificador numérico da CWE.                         \\ \hline
-        weakness\_abstraction  & Nível de abstração da fraqueza.                        \\ \hline
-        description            & Descrição da fraqueza.                                 \\ \hline
-        extended\_description  & Descrição estendida com maior detalhamento.            \\ \hline
-        related\_weaknesses    & Relações com outras CWEs.                              \\ \hline
-        applicable\_platforms  & Plataformas afetadas.                                  \\ \hline
-        background\_details    & Contexto adicional sobre a fraqueza.                   \\ \hline
-        common\_consequences   & Consequências típicas da fraqueza.                     \\ \hline
-        detection\_methods     & Métodos de detecção.                                   \\ \hline
-        potential\_mitigations & Estratégias de mitigação.                              \\ \hline
-        observed\_examples     & Exemplos reais observados.                             \\ \hline
-        affected\_resources    & Recursos afetados.                                     \\ \hline
-        source\_labels         & Origem dos dados utilizados na construção do registro. \\ \hline
-    \end{tabular}
-\end{table}
-
-\subsubsection{Package}
-A tabela a seguir apresenta o dicionário de dados da entidade Package, detalhando o significado de cada atributo.
-\begin{table}[H]
-    \centering
-    \caption{Dicionário de dados da entidade Package}
-    \label{tab:dict-package}
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10cm}|}
-        \hline
-        \textbf{Dado} & \textbf{Descrição}                             \\ \hline
-        ecosystem     & Ecossistema do pacote (ex.: npm, PyPI, Maven). \\ \hline
-        package\_name & Nome do pacote afetado.                        \\ \hline
-    \end{tabular}
-\end{table}
-
-\subsubsection{Reference}
-A tabela a seguir apresenta o dicionário de dados da entidade Reference, detalhando o significado de cada atributo.
-\begin{table}[H]
-    \centering
-    \caption{Dicionário de dados da entidade Reference}
-    \label{tab:dict-reference}
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{10cm}|}
-        \hline
-        \textbf{Dado} & \textbf{Descrição}                              \\ \hline
-        url           & Link de referência associado à vulnerabilidade. \\ \hline
-    \end{tabular}
-\end{table}
-
 \subsection{Volumetria}
 O dataset armazenado no Neo4j possui um total de 1.590.957 nós e 2.063.534 relacionamentos. Esses valores evidenciam a escala do grafo de conhecimento construído, bem como a predominância de entidades do tipo \textit{Reference} e relações de associação entre vulnerabilidades e suas fontes externas.
 
 A distribuição dos nós e relacionamentos é apresentada nas Tabelas~\ref{tab:vol-nodes} e~\ref{tab:vol-relationships}.
 
 \begin{table}[H]
-    \centering
-    \caption{Volumetria dos nós do grafo}
-    \label{tab:vol-nodes}
-    \begin{tabular}{|l|r|}
-        \hline
-        \textbf{Tipo de nó} & \textbf{Quantidade} \\ \hline
-        Total de nós        & 1.590.957           \\ \hline
-        CVE                 & 360.189             \\ \hline
-        CWE                 & 997                 \\ \hline
-        Package             & 11.437              \\ \hline
-        Reference           & 1.218.334           \\ \hline
-    \end{tabular}
+\centering
+\caption{Volumetria dos nós do grafo}
+\label{tab:vol-nodes}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Tipo de nó} & \textbf{Quantidade} \\ \hline
+Total de nós & 1.590.957 \\ \hline
+CVE & 360.189 \\ \hline
+CWE & 997 \\ \hline
+Package & 11.437 \\ \hline
+Reference & 1.218.334 \\ \hline
+\end{tabular}
 \end{table}
 
 \begin{table}[H]
-    \centering
-    \caption{Volumetria dos relacionamentos do grafo}
-    \label{tab:vol-relationships}
-    \begin{tabular}{|l|r|}
-        \hline
-        \textbf{Tipo de relacionamento} & \textbf{Quantidade} \\ \hline
-        Total de relacionamentos        & 2.063.534           \\ \hline
-        HAS\_REFERENCE                  & 1.691.974           \\ \hline
-        HAS\_WEAKNESS                   & 334.538             \\ \hline
-        AFFECTS\_PACKAGE                & 35.578              \\ \hline
-        CHILD\_OF                       & 1.160               \\ \hline
-        CAN\_PRECEDE                    & 143                 \\ \hline
-        PEER\_OF                        & 98                  \\ \hline
-        CAN\_ALSO\_BE                   & 27                  \\ \hline
-        REQUIRES                        & 13                  \\ \hline
-        STARTS\_WITH                    & 3                   \\ \hline
-    \end{tabular}
+\centering
+\caption{Volumetria dos relacionamentos do grafo}
+\label{tab:vol-relationships}
+\begin{tabular}{|l|r|}
+\hline
+\textbf{Tipo de relacionamento} & \textbf{Quantidade} \\ \hline
+Total de relacionamentos & 2.063.534 \\ \hline
+HAS\_REFERENCE & 1.691.974 \\ \hline
+HAS\_WEAKNESS & 334.538 \\ \hline
+AFFECTS\_PACKAGE & 35.578 \\ \hline
+CWE\_CWE  & 1.444 \\ \hline
+\end{tabular}
 \end{table}
 
 
