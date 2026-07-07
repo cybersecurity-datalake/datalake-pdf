@@ -18,31 +18,31 @@ Outras fontes, como Exploit-DB, Vulners e VirusTotal, têm papéis diferentes. O
     \label{tab:fontes-publicas}
     \small
     \renewcommand{\arraystretch}{1.15}
-    \resizebox{\textwidth}{!}{%
-        \begin{tabular}{|p{2.6cm}|p{2.5cm}|p{2.4cm}|p{3.2cm}|p{3.3cm}|p{3.3cm}|}
-            \hline
-            \textbf{Fonte}            & \textbf{Escopo principal}                                     & \textbf{Identificadores}      & \textbf{Pontos fortes}                                                     & \textbf{Limitações}                                                                                     \\
-            \hline
-            CVE Program / CVE List V5 & Registro canônico de vulnerabilidades publicamente divulgadas & CVE-ID                        & Autoridade do identificador, padronização e ampla adoção                   & Pouco enriquecimento técnico em comparação com NVD, EPSS, KEV e bases de advisories                     \\
-            \hline
-            NVD                       & Enriquecimento técnico padronizado                            & CVE, CVSS, CWE, CPE           & Severidade, fraquezas, produtos afetados, configurações e referências      & CVSS não mede risco; completude pode variar; priorização seletiva a partir de 2026                      \\
-            \hline
-            GitHub Advisory Database  & Advisories de segurança, principalmente open source           & GHSA, CVE, CWE                & Pacote, ecossistema, versões vulneráveis/corrigidas e contexto de advisory & Cobertura concentrada em ecossistemas suportados; exige filtragem de malware e advisories não revisados \\
-            \hline
-            OSV                       & Vulnerabilidades open source por pacote, versão e commit      & OSV ID, CVE, GHSA             & Boa semântica de versões e integração multi-ecossistema                    & Menos adequado para produtos generalistas fora do modelo de pacotes                                     \\
-            \hline
-            CISA KEV                  & Vulnerabilidades com exploração conhecida                     & CVE                           & Sinal operacional forte de exploração confirmada                           & Cobertura seletiva e binária                                                                            \\
-            \hline
-            EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & Mede ameaça/probabilidade, não risco completo                                                           \\
-            \hline
-            Exploit-DB                & Exploits públicos e provas de conceito                        & EDB-ID, CVE quando disponível & Evidência de exploit público                                               & PoC não equivale a exploração real; cobertura incompleta                                                \\
-            \hline
-            Vulners                   & Inteligência agregada de vulnerabilidades                     & IDs internos, CVE, CPE        & Correlação multi-fonte                                                     & Restrições de API, plano e licença                                                                      \\
-            \hline
-            VirusTotal                & Threat intelligence e IOCs                                    & Hash, URL, domínio, IP        & Reputação e relações entre artefatos                                       & Não é CVE-first; API pública limitada                                                                   \\
-            \hline
-        \end{tabular}%
-    }
+    {\hfuzz=3pt\resizebox{\textwidth}{!}{%
+            \begin{tabular}{|>{\raggedright\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{2.7cm}|>{\raggedright\arraybackslash}p{2.7cm}|>{\raggedright\arraybackslash}p{2.9cm}|>{\raggedright\arraybackslash}p{3.6cm}|}
+                \hline
+                \textbf{Fonte}            & \textbf{Escopo principal}                                     & \textbf{Identificadores}      & \textbf{Pontos fortes}                                                     & \textbf{Limitações}                                                                                     \\
+                \hline
+                CVE Program / CVE List V5 & Registro canônico de vulnerabilidades publicamente divulgadas & CVE-ID                        & Autoridade do identificador, padronização e ampla adoção                   & Pouco enriquecimento técnico em comparação com NVD, EPSS, KEV e bases de advisories                     \\
+                \hline
+                NVD                       & Enriquecimento técnico padronizado                            & CVE, CVSS, CWE, CPE           & Severidade, fraquezas, produtos afetados, configurações e referências      & CVSS não mede risco; completude pode variar; priorização seletiva a partir de 2026                      \\
+                \hline
+                GitHub Advisory Database  & Advisories de segurança, principalmente open source           & GHSA, CVE, CWE                & Pacote, ecossistema, versões vulneráveis/corrigidas e contexto de advisory & Cobertura concentrada em ecossistemas suportados; exige filtragem de malware e advisories não revisados \\
+                \hline
+                OSV                       & Vulnerabilidades open source por pacote, versão e commit      & OSV ID, CVE, GHSA             & Boa semântica de versões e integração multi-ecossistema                    & Menos adequado para produtos generalistas fora do modelo de pacotes                                     \\
+                \hline
+                CISA KEV                  & Vulnerabilidades com exploração conhecida                     & CVE                           & Sinal operacional forte de exploração confirmada                           & Cobertura seletiva e binária                                                                            \\
+                \hline
+                EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & Mede ameaça/probabilidade, não risco completo                                                           \\
+                \hline
+                Exploit-DB                & Exploits públicos e provas de conceito                        & EDB-ID, CVE quando disponível & Evidência de exploit público                                               & PoC não equivale a exploração real; cobertura incompleta                                                \\
+                \hline
+                Vulners                   & Inteligência agregada de vulnerabilidades                     & IDs internos, CVE, CPE        & Correlação multi-fonte                                                     & Restrições de API, plano e licença                                                                      \\
+                \hline
+                VirusTotal                & Threat intelligence e IOCs                                    & Hash, URL, domínio, IP        & Reputação e relações entre artefatos                                       & Não é CVE-first; API pública limitada                                                                   \\
+                \hline
+            \end{tabular}%
+        }}
 
     \vspace{0.2cm}
     {\footnotesize\textit{Fonte: elaboração própria com base nas documentações oficiais das fontes analisadas \cite{cve_program_overview,nvd_home,github_advisory_database_docs,github_advisory_database_repo,osv_database,osv_schema,cisa_kev_catalog,first_epss,exploitdb,vulners,vulners_api_docs,virustotal_api_v3}.}}

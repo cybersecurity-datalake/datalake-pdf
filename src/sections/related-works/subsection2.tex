@@ -19,23 +19,23 @@ Assim, a principal contribuição do pipeline final consiste em estabelecer uma 
     \small
     \renewcommand{\arraystretch}{1.15}
     \resizebox{\textwidth}{!}{%
-        \begin{tabular}{|p{3.0cm}|p{3.1cm}|p{3.7cm}|p{3.2cm}|}
+        \begin{tabular}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{3.1cm}|>{\raggedright\arraybackslash}p{3.7cm}|>{\raggedright\arraybackslash}p{3.2cm}|}
             \hline
-            \textbf{Lacuna observada}                & \textbf{Consequência para pesquisa}                        & \textbf{Resposta atual do repositório}                    & \textbf{Evolução necessária}                             \\
+            \textbf{Lacuna observada}                & \textbf{Consequência para pesquisa}                        & \textbf{Resposta atual do repositório}                    & \textbf{Evolução necessária}                                                                 \\
             \hline
-            Fontes usam modelos de dados diferentes  & Dificulta comparação e fusão                               & Extratores separados por fonte e inspeção de schemas      & Criar camada Silver com modelo canônico                  \\
+            Fontes usam modelos de dados diferentes  & Dificulta comparação e fusão                               & Extratores separados por fonte e inspeção de schemas      & Criar camada Silver com modelo canônico                                                      \\
             \hline
-            CVSS não representa risco completo       & Priorização pode ser enviesada                             & NVD coleta CVSS, KEV coleta exploração conhecida          & Integrar EPSS e Exploit-DB                               \\
+            CVSS não representa risco completo       & Priorização pode ser enviesada                             & NVD coleta CVSS, KEV coleta exploração conhecida          & Integrar EPSS e Exploit-DB                                                                   \\
             \hline
-            Bases têm granularidades diferentes      & CVE, pacote, CPE e advisory não se alinham automaticamente & GitHub Advisory extrai pacotes, ranges e CVEs associados  & Integrar OSV e resolver entidades entre CVE/GHSA/OSV/CPE \\
+            Bases têm granularidades diferentes      & CVE, pacote, CPE e advisory não se alinham automaticamente & GitHub Advisory extrai pacotes, ranges e CVEs associados  & Integrar OSV e resolver entidades entre CVE/\allowbreak GHSA/\allowbreak OSV/\allowbreak CPE \\
             \hline
-            APIs têm limites e instabilidade         & Coletas longas podem falhar                                & NVD possui rate limiting, retries e checkpointing         & Generalizar mecanismo para demais APIs                   \\
+            APIs têm limites e instabilidade         & Coletas longas podem falhar                                & NVD possui rate limiting, retries e checkpointing         & Generalizar mecanismo para demais APIs                                                       \\
             \hline
-            Dados mudam ao longo do tempo            & Estudos podem ser irreprodutíveis                          & Metadados de execução e outputs datados                   & Versionamento formal de snapshots                        \\
+            Dados mudam ao longo do tempo            & Estudos podem ser irreprodutíveis                          & Metadados de execução e outputs datados                   & Versionamento formal de snapshots                                                            \\
             \hline
-            README descreve arquitetura aspiracional & Risco de superestimar maturidade                           & Implementação real é Bronze/profiling                     & Alinhar documentação ao estágio atual                    \\
+            README descreve arquitetura aspiracional & Risco de superestimar maturidade                           & Implementação real é Bronze/profiling                     & Alinhar documentação ao estágio atual                                                        \\
             \hline
-            Ausência de Silver/Gold                  & Ainda não há dataset analítico final                       & Bronze e schema reconnaissance parcialmente implementados & Criar transformações, testes e notebooks                 \\
+            Ausência de Silver/Gold                  & Ainda não há dataset analítico final                       & Bronze e schema reconnaissance parcialmente implementados & Criar transformações, testes e notebooks                                                     \\
             \hline
         \end{tabular}%
     }
