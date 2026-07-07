@@ -14,7 +14,8 @@ Diante desse cenário, este trabalho posiciona-se como uma proposta de integraç
     \label{tab:related_work}
     \small
     \renewcommand{\arraystretch}{1.1}
-    \begin{tabular}{|p{3.0cm}|p{4.0cm}|p{4.2cm}|p{3.2cm}|}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}p{4.0cm}|>{\raggedright\arraybackslash}p{4.2cm}|>{\raggedright\arraybackslash}p{3.2cm}|}
         \hline
         \textbf{Referência}                                                                                                                               & \textbf{Contribuição} & \textbf{Limitação observada} & \textbf{Relação com este trabalho} \\
         \hline
@@ -48,5 +49,6 @@ Diante desse cenário, este trabalho posiciona-se como uma proposta de integraç
         Escopo frequentemente centrado em ecossistemas específicos.                                                                                       &
         Motiva integração com bases orientadas a pacotes, como GHSA e OSV.                                                                                                                                                                            \\
         \hline
-    \end{tabular}
+    \end{tabular}%
+    }
 \end{table}
