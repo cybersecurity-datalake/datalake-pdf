@@ -11,7 +11,7 @@ build também ficam em `output/`.
 3. No terminal do container, rode:
 
 ```bash
-latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=output src/main.tex
+make pdf
 ```
 
 ## Ferramentas instaladas
@@ -40,8 +40,10 @@ usuário `vscode`.
   de checksum usada pelo instalador do Codex CLI
 - `postAttachCommand`: atualiza o TTY do `gpg-agent` a cada nova conexão do VS
   Code ao container
-- `postStartCommand`: executa `.devcontainer/start-watchers.sh`
-- `start-watchers.sh`: inicia `latexmk -pvc` para `src/main.tex`
+- `postStartCommand`: não inicia processos persistentes; o startup termina sem
+  watchers em background
+- `start-watchers.sh`: script manual e idempotente para iniciar `latexmk -pvc`
+  apenas quando desenvolvimento contínuo for desejado
 
 ## Assinatura GPG no DevContainer
 

@@ -18,7 +18,7 @@ Hoje o repositório está organizado para um documento principal único:
 O fluxo esperado é:
 
 1. Escrever ou incluir conteúdo LaTeX a partir de `src/main.tex`.
-2. Compilar localmente com `latexmk`.
+2. Compilar localmente com `make pdf`.
 3. Validar automaticamente no GitHub Actions a cada `push` e `pull_request`.
 
 ## Desenvolvimento local
@@ -36,12 +36,23 @@ O fluxo esperado é:
 3. Depois da criação do ambiente, use o terminal do container para compilar:
 
 ```bash
-latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=output src/main.tex
+make pdf
+```
+
+Para limpar artefatos antigos e forçar uma build reproduzível:
+
+```bash
+make clean
 ```
 
 O DevContainer instala `latexmk`, `chktex`, TeX Live e a extensão LaTeX Workshop.
 Em Linux local, ele também encaminha o `gpg-agent` do host para manter a
 assinatura de commits dentro do container.
+
+O ciclo de vida do DevContainer não inicia mais um watcher de `latexmk` em
+background. Isso evita processos acumulados a cada restart do container e deixa
+o build contínuo como uma ação explícita (`make watch`) ou do próprio
+LaTeX Workshop.
 
 ## Uso com Codespaces
 
@@ -53,7 +64,7 @@ O workflow `tex-ci.yml` executa:
 
 - verificação de existência do `src/main.tex`
 - lint com `chktex`
-- build com `latexmk`
+- build limpo com `make clean && make pdf`
 - publicação do `output/main.pdf` como artefato do job
 
 ## Estrutura sugerida para crescimento

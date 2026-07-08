@@ -37,10 +37,12 @@ jobs:
         run: mkdir -p output
 
       - name: Lint TeX sources
-        run: chktex -q -n1 -n8 src/main.tex
+        run: make lint
 
       - name: Build PDF
-        run: latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=output src/main.tex
+        run: |
+          make clean
+          make pdf
 
       - name: Verify PDF output
         run: test -f output/main.pdf
