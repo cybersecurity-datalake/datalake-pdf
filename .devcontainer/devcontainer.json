@@ -43,6 +43,5 @@
     },
     "postCreateCommand": "bash .devcontainer/post-create-validate.sh",
     "postAttachCommand": "gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1 || true",
-    "postStartCommand": "bash .devcontainer/start-watchers.sh || true",
     "remoteUser": "vscode"
 }
