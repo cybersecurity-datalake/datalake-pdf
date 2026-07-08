@@ -10,7 +10,7 @@ Este repositório inclui um DevContainer preparado para editar e compilar um
 3. Compile o documento no terminal:
 
 ```bash
-latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=output src/main.tex
+make pdf
 ```
 
 ## O que o ambiente entrega
@@ -25,7 +25,7 @@ latexmk -pdf -interaction=nonstopmode -file-line-error -halt-on-error -outdir=ou
 ## Comportamento padrão
 
 - `postCreateCommand`: registra as versões de `latexmk`, `chktex` e `latexindent`
-- `postStartCommand`: inicia um watcher para `src/main.tex`, se ele existir
+- `postStartCommand`: não inicia watchers persistentes; o startup termina limpo
 - LaTeX Workshop: configurado para build em alterações de arquivos
 
 ## Logs
