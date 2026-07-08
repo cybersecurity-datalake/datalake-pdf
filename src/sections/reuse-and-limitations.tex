@@ -1,3 +1,11 @@
 \section{Potencial de Reuso e Limitações}
 
-TODO
+O dataset disponibilizado neste trabalho foi concebido para apoiar pesquisas e aplicações que demandam informações integradas sobre vulnerabilidades de software. Ao consolidar dados provenientes de múltiplas fontes públicas em um modelo unificado e enriquecido, reduz-se o esforço necessário para coleta, normalização e correlação de informações normalmente distribuídas entre diferentes plataformas.
+
+Na comunidade acadêmica, o dataset pode ser utilizado em estudos sobre priorização de vulnerabilidades, predição de exploração, avaliação de métricas de risco, construção de grafos de conhecimento, mineração de dados de segurança e desenvolvimento de modelos de aprendizado de máquina. A disponibilidade dos scripts de extração e transformação também permite reproduzir integralmente o processo de construção do conjunto de dados ou adaptá-lo para incorporar novas fontes de informação.
+
+Em aplicações industriais, o dataset pode servir como base para plataformas de gestão de vulnerabilidades, sistemas de apoio à priorização de remediação, dashboards de inteligência de ameaças e análises de impacto sobre produtos, pacotes e fraquezas de software. A modelagem em grafo facilita consultas exploratórias e análises de relacionamento entre vulnerabilidades, CWEs, pacotes afetados e referências externas.
+
+A arquitetura adotada também favorece a evolução contínua do projeto. Novas fontes de dados, como EPSS, OSV, Exploit-DB, Vulners e VirusTotal, podem ser incorporadas mantendo o mesmo pipeline de processamento e preservando a proveniência das informações. Essa característica torna o dataset adequado para estudos longitudinais e para o acompanhamento da evolução do ecossistema de vulnerabilidades.
+
+Apesar dessas vantagens, algumas limitações devem ser consideradas. O conjunto de dados depende da qualidade e da disponibilidade das bases públicas utilizadas, estando sujeito a inconsistências, atrasos de sincronização e mudanças em APIs ou formatos de dados. Além disso, a versão atual integra quatro fontes principais, enquanto outras bases previstas na arquitetura permanecem como extensões futuras. Finalmente, embora o modelo em grafo permita representar relações complexas entre entidades, ele não elimina limitações inerentes às fontes originais nem substitui análises contextualizadas do ambiente onde as vulnerabilidades serão avaliadas.
