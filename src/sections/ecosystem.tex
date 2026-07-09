@@ -4,7 +4,6 @@ O ecossistema de inteligência de vulnerabilidades é composto por diversas base
 
 O CVE Program estabelece o identificador padronizado (CVE-ID) utilizado como referência comum entre diferentes bases. A National Vulnerability Database (NVD) complementa esses registros com informações técnicas, incluindo métricas CVSS, categorias CWE, configurações CPE e referências. Já o GitHub Advisory Database e o Open Source Vulnerabilities (OSV) ampliam essa visão ao representar vulnerabilidades no nível de pacotes, ecossistemas e versões de software, sendo especialmente relevantes para aplicações open source. A CISA Known Exploited Vulnerabilities (KEV) fornece evidências de exploração conhecida, enquanto o Exploit Prediction Scoring System (EPSS) estima a probabilidade de exploração em curto prazo. Fontes complementares, como Exploit-DB, Vulners e VirusTotal, adicionam informações sobre exploits públicos, inteligência agregada e indicadores de comprometimento. As principais características dessas bases são resumidas na Tabela \ref{tab:fontes-publicas}.
 
-
 \begin{table}[htbp]
     \centering
     \caption{Comparação entre fontes públicas}
@@ -26,7 +25,7 @@ O CVE Program estabelece o identificador padronizado (CVE-ID) utilizado como ref
                 \hline
                 CISA KEV                  & Vulnerabilidades com exploração conhecida                     & CVE                           & Sinal operacional forte de exploração confirmada                           & Cobertura seletiva e binária                                                                            \\
                 \hline
-                EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & Mede ameaça/probabilidade,                                                                              \\ não risco completo                                                           \\
+                EPSS                      & Probabilidade de exploração                                   & CVE                           & Score probabilístico e histórico diário                                    & \shortstack[l]{Mede ameaça/probabilidade,                                                               \\não risco completo}                                                           \\
                 \hline
                 Exploit-DB                & Exploits públicos e provas de conceito                        & EDB-ID, CVE quando disponível & Evidência de exploit público                                               & PoC não equivale a exploração real; cobertura incompleta                                                \\
                 \hline
