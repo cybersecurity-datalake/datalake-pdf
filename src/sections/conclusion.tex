@@ -1,3 +1,9 @@
 \section{Conclusão}
 
-TODO
+A integração de informações provenientes de diferentes fontes públicas permite superar parte das limitações impostas pela fragmentação do ecossistema de dados sobre vulnerabilidades de software. Ao reunir identificadores, métricas de severidade, fraquezas, pacotes afetados, referências externas e informações de exploração conhecida em uma estrutura unificada, torna-se possível realizar análises mais abrangentes do que aquelas obtidas a partir de bases isoladas.
+
+A arquitetura adotada prioriza modularidade, rastreabilidade e reprodutibilidade por meio de um pipeline organizado em camadas, da preservação da proveniência dos dados e da documentação completa do processo de coleta, transformação, integração e carga. A representação final em grafo amplia as possibilidades de exploração analítica, permitindo consultas baseadas em relacionamentos entre vulnerabilidades, CWEs, pacotes e referências, além de facilitar futuras aplicações em inteligência de ameaças, gestão de vulnerabilidades e análise de risco.
+
+Embora a versão atual consolide informações provenientes da CVE List V5, National Vulnerability Database (NVD), CISA Known Exploited Vulnerabilities (KEV) e GitHub Advisory Database, a arquitetura foi concebida para permitir a incorporação incremental de novas fontes, como EPSS, OSV, Exploit-DB, Vulners e VirusTotal, preservando compatibilidade com o pipeline existente e mantendo a proveniência das informações.
+
+A disponibilização pública dos dados, do código-fonte e da documentação favorece a reprodutibilidade científica, reduz o esforço necessário para integração de múltiplas bases de vulnerabilidades e estabelece uma infraestrutura extensível para pesquisas futuras. Além de apoiar estudos em predição de exploração, priorização de remediação, mineração de dados e construção de grafos de conhecimento, a arquitetura também fornece uma base para o desenvolvimento de plataformas de inteligência de vulnerabilidades e soluções de apoio à tomada de decisão em ambientes operacionais.
